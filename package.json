@@ -1,7 +1,17 @@
 {
   "name": "fake-store-api",
+  "description": "Fake Store API is a REST API that provides fake e-commerce data in JSON format to developers who want to quickly prototype a web or mobile e-commerce application.",
   "version": "0.1.0",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/denisakp/fake-store-api.git"
+  },
+  "author": {
+    "email": "akpagnonited@gmail.com",
+    "name": "Denis AKPAGNONITE",
+    "url": "https://denisakp.me"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -15,6 +25,8 @@
     "eslint": "8.41.0",
     "eslint-config-next": "13.4.4",
     "next": "13.4.4",
+    "nextra": "^2.6.2",
+    "nextra-theme-docs": "^2.6.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "typescript": "5.1.3"
