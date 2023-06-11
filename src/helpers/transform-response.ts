@@ -3,7 +3,7 @@
  * @param data
  */
 
-const transformResults = (data: any) => {
+const transformResponse = (data: any) => {
     const isArray: boolean = Array.isArray(data);
 
     const transformSingle = (result: any) => {
@@ -27,4 +27,4 @@ const transformResults = (data: any) => {
     return isArray ? transformMultiple(data) : transformSingle(data)
 };
 
-export default transformResults;
+export default transformResponse;
