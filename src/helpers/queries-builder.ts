@@ -1,7 +1,10 @@
 import {DEFAULT_SORT_DIRECTION, DEFAULT_SORT_FIELD} from "@/helpers/constants";
+import {ProductQueryBuilderParameter, ProductQueryBuilderResponse} from "@/interfaces/product.interface";
+import {OrderQueryBuilderParameter, OrderQueryBuilderResponse} from "@/interfaces/order.interface";
+import {CustomerQueryBuilderParameter, CustomerQueryBuilderResponse} from "@/interfaces/customer.interface";
 
 /**
- * This function build queries used as parameters to load products
+ * This function build queries used to load products
  * @param query
  */
 export function productQueryBuilder(query: ProductQueryBuilderParameter): ProductQueryBuilderResponse {
@@ -43,51 +46,66 @@ export function productQueryBuilder(query: ProductQueryBuilderParameter): Produc
 }
 
 /**
- * This function build queries used as parameters to load orders
+ * This function build query used to load orders
  * @param query
  */
-export function orderQueryBuilder(query: OrderQueryParameter): OrderQueryResponse {
-    const page = query?.page ?? 1;
-    const limit = query?.limit ?? 25;
+export function orderQueryBuilder(query: OrderQueryBuilderParameter): OrderQueryBuilderResponse {
+    const page = query.page;
+    const limit = query.limit;
     const skip = (page - 1) * limit;
 
     let options: any = {};
+    let sort: any = {};
 
-    if (query?.startDate && query?.endDate) {
+    if (query.sort && query.direction)
+        sort[query.sort] = query.direction
+    else
+        sort['created_datetime'] = -1;
+
+    if(query.startPrice && query.endPrice) {
+        options['created_datetime'] = {
+            $gte: query?.startDate,
+            $lte: query?.endDate
+        }
+
+        options['total_price'] = {
+            $gte: query.startPrice,
+            $lte: query.endPrice,
+        }
+    } else {
         options['createdDatetime'] = {
             $gte: query?.startDate,
             $lte: query?.endDate
         };
     }
 
-    return {options, skip};
+    return {options, sort, skip};
 }
 
+/**
+ * This function build queries to load customers
+ * @param query
+ */
+export function customerQueryBuilder(query: CustomerQueryBuilderParameter): CustomerQueryBuilderResponse {
+    const page = query.page;
+    const limit = query.limit;
+    const skip = (page - 1) * limit;
 
-export interface ProductQueryBuilderParameter {
-    limit: number;
-    page: number;
-    min?: number;
-    max?: number;
-    q?: string;
-    sort?: string;
-    direction?: number;
-}
+    let options: any = {};
+    const sort: any = {}
 
-interface ProductQueryBuilderResponse {
-    options: object;
-    sort: any;
-    skip: number;
-}
+    if (query.sort && query.direction) {
+        sort[query.sort] = query.direction
+    } else {
+        sort[DEFAULT_SORT_FIELD] = DEFAULT_SORT_DIRECTION
+    }
 
-interface OrderQueryParameter {
-    startDate?: string;
-    endDate?: string;
-    limit?: number;
-    page?: number;
-}
+    if (query?.q) {
+        options['name'] = {
+            $regex: query?.q,
+            $options: 'i'
+        }
+    }
 
-interface OrderQueryResponse {
-    skip: number;
-    options: object;
+    return {options, sort, skip};
 }
