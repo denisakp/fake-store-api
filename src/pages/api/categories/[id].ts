@@ -1,29 +1,34 @@
 import {NextApiRequest, NextApiResponse} from "next";
-import {loadCategory, updateCategory} from "@/services/categories";
-import toJson from "@/helpers/toJson";
+import toJson from "@/helpers/transform-response";
+import {loadCategory, updateCategory} from "@/services/categories.service";
+import createOrUpdateCategory from "@/validations/category.validation";
 
 export default async function handler (req: NextApiRequest, res: NextApiResponse) {
-    const id: string = req.query.id as string
+    const docRef: string = req.query.id as string
 
     switch (req.method) {
         case 'GET':
-            const product = await loadCategory(id);
+            const product = await loadCategory(docRef);
             if(!product)
-                res.status(400).json({ message: 'Category with id: '+id+' not found !'});
+                res.status(400).json({message: "Category with reference '" + docRef + "' not found !"});
             else
                 res.json(toJson(product));
             break;
         case 'PATCH':
             const { name } = req.body;
+            const {error} = createOrUpdateCategory.validate(req.body);
 
-            const updated = await updateCategory(id, name)
+            if (error)
+                res.status(400).json({error: 'Validation Error', message: error});
+
+            const updated = updateCategory(docRef, name);
 
             if(!updated)
-                res.status(400).json({ message: 'Failed to update resource with id: '+id});
+                res.status(400).json({message: "Category with reference '" + docRef + "' not found !"});
             else
-                res.json(updated)
+                res.json(updated);
             break;
         default:
-            res.status(405).json({message: 'Method not allowed'})
+            res.status(405).json({message: 'Method not allowed'});
     }
 }

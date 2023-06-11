@@ -1,7 +1,7 @@
 import {NextApiRequest, NextApiResponse} from "next";
-import Joi from "joi";
-import {createCategory, loadCategories} from "@/services/categories";
-import toJson from "@/helpers/toJson";
+import toJson from "@/helpers/transform-response";
+import {createCategory, loadCategories} from "@/services/categories.service";
+import createOrUpdateCategory from "@/validations/category.validation";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
@@ -12,19 +12,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             break;
         case 'POST':
             const {name} = req.body;
-            const {error} = createCategoryValidation.validate(req.body)
+            const {error} = createOrUpdateCategory.validate(req.body)
 
             if (error)
                 res.status(400).json({error: 'Validation Error', message: error})
 
-            const category = await createCategory(name);
+            const category = createCategory(name);
             res.json(category);
             break;
         default:
-            return res.status(405).json({message: 'Method not allowed'})
+            res.status(405).json({message: 'Method not allowed'})
     }
 }
 
-const createCategoryValidation = Joi.object({
-    name: Joi.string().required().min(3)
-})
+
