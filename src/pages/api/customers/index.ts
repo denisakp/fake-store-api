@@ -1,9 +1,8 @@
 import {NextApiRequest, NextApiResponse} from "next";
 import {DEFAULT_PAGINATION_LIMIT, DEFAULT_PAGINATION_PAGE, DEFAULT_SORT_DIRECTION} from "@/helpers/constants";
-import {createCustomer, loadCustomers} from "@/services/customers.service";
+import {loadCustomers} from "@/services/customers.service";
 import PaginationResponse from "@/helpers/pagination-response";
-import transformResponse from "@/helpers/transform-response";
-import {createOrUpdateCustomer, loadCustomerValidation} from "@/validations/customer.validation";
+import {loadCustomerValidation} from "@/validations/customer.validation";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     switch (req.method) {
@@ -31,15 +30,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 count: total,
                 data: customers
             }));
-            break;
-        case 'POST':
-            const {error, value} = createOrUpdateCustomer.validate(req.body);
-            if (error)
-                res.status(422).json({error: 'Validation error', message: error.message})
-
-            const customer = await createCustomer(value);
-
-            res.json(transformResponse(customer));
             break;
         default:
             res.status(405).json({message: 'Method not allowed'})

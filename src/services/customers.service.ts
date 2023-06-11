@@ -1,9 +1,9 @@
 import connectToDB from "@/lib/mongodb";
 import {ObjectId} from "bson";
 import {customerQueryBuilder, orderQueryBuilder} from "@/helpers/queries-builder";
-import {CustomerQueryBuilderParameter} from "@/interfaces/customer.interface";
+import {CustomerInterface, CustomerQueryBuilderParameter} from "@/interfaces/customer.interface";
 import {OrderQueryBuilderParameter} from "@/interfaces/order.interface";
-import {CustomerInterface} from "@/interfaces/auth.interface";
+import {SITE_URL} from "@/helpers/constants";
 
 /**
  * Load customers resources
@@ -39,7 +39,7 @@ export async function loadCustomer(docRef: string) {
 
         return {
             ...customer,
-            orders: 'https://fakestoreapi.denisakp.me/api/customers/' + docRef + '/orders'
+            orders: SITE_URL +'/customers/' + docRef + '/orders'
         };
     } catch (e) {
         throw new Error('Failed to load customer with docRef: ' + docRef);
@@ -57,15 +57,15 @@ export async function loadCustomerOrders(docRef: string, query: OrderQueryBuilde
     const {client, db} = await connectToDB();
     try {
         const docRef_oi = new ObjectId(docRef);
-        const customer_oi = new ObjectId(docRef);
+        const customer_oi = new ObjectId('6485c35814c402ee08ec6294');
         if (!docRef_oi || !docRef_oi.equals(customer_oi))
             return;
 
         const {options, sort, skip} = orderQueryBuilder(query);
 
-        const total: number = await db.collection("orders").countDocuments(options);
+        const total: number = await db.collection("orders").countDocuments({...options, customer: customer_oi });
 
-        const orders = await db.collection("orders").find(options).limit(query.limit).skip(skip).sort(sort).toArray()
+        const orders = await db.collection("orders").find({...options, customer: customer_oi }).limit(query.limit).skip(skip).sort(sort).toArray()
 
         return {orders, total};
 

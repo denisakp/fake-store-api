@@ -3,7 +3,7 @@ import {loadCustomer, updateCustomer} from "@/services/customers.service";
 import transformResponse from "@/helpers/transform-response";
 import {createOrUpdateCustomer} from "@/validations/customer.validation";
 import {loadOrderValidation} from "@/validations/order.validation";
-import {DEFAULT_PAGINATION_LIMIT, DEFAULT_PAGINATION_PAGE, DEFAULT_SORT_DIRECTION} from "@/helpers/constants";
+import {DEFAULT_PAGINATION_LIMIT, DEFAULT_PAGINATION_PAGE, DEFAULT_SORT_DIRECTION, SITE_URL} from "@/helpers/constants";
 import {loadOrders} from "@/services/orders.service";
 import PaginationResponse from "@/helpers/pagination-response";
 
@@ -42,7 +42,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     data: orders
                 })
 
-                res.json({customer: process.env.SITE_URL + path[0], orders: response});
+                res.json({customer: SITE_URL + path[0], orders: response});
                 break;
             }
 

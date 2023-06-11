@@ -11,3 +11,21 @@ export interface CustomerQueryBuilderResponse {
     sort: any;
     skip: number;
 }
+
+export interface CustomerInterface {
+    name: string;
+    email: string;
+    address?: {
+        delivery?: Array<AddressInterface>,
+        billing?: Array<AddressInterface>,
+    }
+}
+
+interface AddressInterface {
+    city?: string;
+    street?: string;
+    number?: string;
+    zipCode?: string;
+    country?: string;
+    phone?: string;
+}
