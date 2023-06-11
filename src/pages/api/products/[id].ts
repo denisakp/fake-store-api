@@ -1,6 +1,7 @@
 import {NextApiRequest, NextApiResponse} from "next";
 import {deleteProduct, loadProduct, updateProduct} from "@/services/product.service";
 import {createOrUpdateProduct} from "@/validations/product.validation";
+import transformResponse from "@/helpers/transform-response";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const docRef: string = req.query.id as string;
@@ -11,7 +12,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             if (!product)
                 res.status(400).json({message: "Product with reference '" + docRef + "' not found !"});
 
-            res.json(product);
+            res.json(transformResponse(product));
             break;
         case 'PATCH':
             const {error, value} = createOrUpdateProduct.validate(req.body);
@@ -22,7 +23,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             if(!updated)
                 res.status(400).json({ message: "Product with reference '" + docRef + "' not found !" });
 
-            res.json(updated);
+            res.json(transformResponse(updated));
             break;
         case 'DELETE':
             const success = await deleteProduct(docRef);

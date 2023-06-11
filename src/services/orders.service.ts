@@ -94,14 +94,3 @@ export async function deleteOrder(docRef: string) {
 
     return !(!docRef_oi || !docRef_oi.equals(order_oi));
 }
-
-//requêtes
-//commande total_price > x
-//commande total_price < x
-//commande x |total_price| y
-
-
-
-
-
-

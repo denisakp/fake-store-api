@@ -20,7 +20,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
             const category = createCategory(name);
 
-            res.json(category);
+            res.json(transformResponse(category));
             break;
         default:
             res.status(405).json({message: 'Method not allowed'})

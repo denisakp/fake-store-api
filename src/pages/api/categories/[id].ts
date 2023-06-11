@@ -1,7 +1,7 @@
 import {NextApiRequest, NextApiResponse} from "next";
-import toJson from "@/helpers/transform-response";
 import {loadCategory, updateCategory} from "@/services/categories.service";
 import createOrUpdateCategory from "@/validations/category.validation";
+import transformResponse from "@/helpers/transform-response";
 
 export default async function handler (req: NextApiRequest, res: NextApiResponse) {
     const docRef: string = req.query.id as string
@@ -12,7 +12,7 @@ export default async function handler (req: NextApiRequest, res: NextApiResponse
             if(!product)
                 res.status(400).json({message: "Category with reference '" + docRef + "' not found !"});
 
-            res.json(toJson(product));
+            res.json(transformResponse(product));
             break;
         case 'PATCH':
             const { name } = req.body;
@@ -25,7 +25,7 @@ export default async function handler (req: NextApiRequest, res: NextApiResponse
             if(!updated)
                 res.status(400).json({message: "Category with reference '" + docRef + "' not found !"});
 
-            res.json(updated);
+            res.json(transformResponse(updated));
             break;
         default:
             res.status(405).json({message: 'Method not allowed'});

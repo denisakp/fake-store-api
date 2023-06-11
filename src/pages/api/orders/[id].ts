@@ -2,6 +2,7 @@ import {NextApiRequest, NextApiResponse} from "next";
 import {loadOrder, updateOrder} from "@/services/orders.service";
 import {createOrUpdateOrder} from "@/validations/order.validation";
 import {deleteProduct} from "@/services/product.service";
+import transformResponse from "@/helpers/transform-response";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const docRef: string = req.query.id as string;
@@ -12,7 +13,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             if(!order)
                 res.status(400).json({message: "Order with reference '" + docRef + "' not found !"});
 
-            res.json(order);
+            res.json(transformResponse(order));
             break;
         case 'PATCH':
             const {error, value} = createOrUpdateOrder.validate(req.body);
@@ -23,7 +24,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             if(!updated)
                 res.status(400).json({ message: "Order with reference '" + docRef + "' not found !" });
 
-            res.json(updated);
+            res.json(transformResponse(updated));
             break;
         case 'DELETE':
             const success = await deleteProduct(docRef);
