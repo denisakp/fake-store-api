@@ -8,7 +8,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     switch (req.method) {
         case 'GET':
             const product = await loadProduct(docRef);
-
             if (!product)
                 res.status(400).json({message: "Product with reference '" + docRef + "' not found !"});
 
@@ -16,21 +15,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             break;
         case 'PATCH':
             const {error, value} = createOrUpdateProduct.validate(req.body);
-
             if (error)
-                res.status(400).json({error: 'Validation error', message: error.message});
+                res.status(422).json({error: 'Validation error', message: error.message});
 
             const updated = await updateProduct(docRef, value);
+            if(!updated)
+                res.status(400).json({ message: "Product with reference '" + docRef + "' not found !" });
 
             res.json(updated);
             break;
         case 'DELETE':
             const success = await deleteProduct(docRef);
-
-            if(success)
-                res.status(204)
-            else
+            if(!success)
                 res.status(400).json({message: "Product with reference '" + docRef + "' not found !"});
+
+            res.status(204);
             break;
         default:
             res.status(405).json({message: 'Method not allowed'})

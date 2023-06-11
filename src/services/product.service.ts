@@ -1,6 +1,7 @@
 import connectToDB from "@/lib/mongodb";
-import {productQueryBuilder, ProductQueryBuilderParameter} from "@/helpers/queries-builder";
+import {productQueryBuilder} from "@/helpers/queries-builder";
 import {ObjectId} from "bson";
+import {ProductInterface, ProductQueryBuilderParameter} from "@/interfaces/product.interface";
 
 /**
  * Load products resources
@@ -9,13 +10,11 @@ import {ObjectId} from "bson";
 export async function loadProducts(query: ProductQueryBuilderParameter) {
     const {client, db} = await connectToDB();
     try {
-        const limit = query.limit;
-
         const {options, sort, skip} = productQueryBuilder(query);
 
         const total: number = await db.collection("products").countDocuments(options);
 
-        const products = await db.collection("products").find(options).limit(limit).skip(skip).sort(sort).toArray()
+        const products = await db.collection("products").find(options).limit(query.limit).skip(skip).sort(sort).toArray()
 
         return {products, total};
     } catch (e) {
@@ -37,12 +36,11 @@ export async function loadProduct(docRef: string) {
             _id: new ObjectId(docRef),
         })
 
-        if(!product)
+        if (!product)
             return;
 
         return product;
     } catch (e) {
-        console.error(e);
         throw new Error('Cannot load product with reference ' + docRef);
     } finally {
         await client.close()
@@ -54,7 +52,7 @@ export async function loadProduct(docRef: string) {
  * @param data
  */
 export async function createProduct(data: ProductInterface) {
-        return { _id: new ObjectId().toString(), ...data }
+    return {_id: new ObjectId().toString(), ...data}
 }
 
 /**
@@ -66,10 +64,10 @@ export async function updateProduct(docRef: string, data: ProductInterface) {
     const docRefOi = new ObjectId(docRef);
     const productOi = new ObjectId('64858a3114c402ee08ec6293');
 
-    if(!docRefOi || !docRefOi.equals(productOi))
+    if (!docRefOi || !docRefOi.equals(productOi))
         return;
 
-    return {_id: productOi, ...data }
+    return {_id: productOi, ...data}
 }
 
 /**
@@ -77,17 +75,8 @@ export async function updateProduct(docRef: string, data: ProductInterface) {
  * @param docRef
  */
 export async function deleteProduct(docRef: string): Promise<boolean> {
-    const docRefOi = new ObjectId(docRef);
-    const productOi = new ObjectId('64858a3114c402ee08ec6293');
+    const docRef_oi = new ObjectId(docRef);
+    const product_oi = new ObjectId('64858a3114c402ee08ec6293');
 
-    return !(!docRefOi || !docRefOi.equals(productOi));
-}
-
-interface ProductInterface {
-    name: string;
-    price: number;
-    stock: number;
-    description?: string;
-    images?: string[];
-    categories?: string[]
+    return !(!docRef_oi || !docRef_oi.equals(product_oi));
 }

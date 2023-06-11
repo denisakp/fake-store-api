@@ -11,22 +11,21 @@ export default async function handler (req: NextApiRequest, res: NextApiResponse
             const product = await loadCategory(docRef);
             if(!product)
                 res.status(400).json({message: "Category with reference '" + docRef + "' not found !"});
-            else
-                res.json(toJson(product));
+
+            res.json(toJson(product));
             break;
         case 'PATCH':
             const { name } = req.body;
-            const {error} = createOrUpdateCategory.validate(req.body);
 
+            const {error} = createOrUpdateCategory.validate(req.body);
             if (error)
-                res.status(400).json({error: 'Validation Error', message: error});
+                res.status(422).json({error: 'Validation Error', message: error});
 
             const updated = updateCategory(docRef, name);
-
             if(!updated)
                 res.status(400).json({message: "Category with reference '" + docRef + "' not found !"});
-            else
-                res.json(updated);
+
+            res.json(updated);
             break;
         default:
             res.status(405).json({message: 'Method not allowed'});

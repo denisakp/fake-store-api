@@ -16,7 +16,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             if (Object.keys(req.query).length > 0) {
                 const {error} = loadProductValidation.validate(req.query);
                 if (error)
-                    res.status(400).json({error: 'Validation error', message: error.message})
+                    res.status(422).json({error: 'Validation error', message: error.message})
             }
 
             const parameter = {
@@ -41,12 +41,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             break;
         case 'POST':
             const {error, value} = createOrUpdateProduct.validate(req.body);
-
             if (error)
-                res.status(400).json({error: 'Validation error', message: error.message})
+                res.status(422).json({error: 'Validation error', message: error.message})
 
             const product = await createProduct(value);
-            res.json(transformResponse(product));
+
+            res.json(transformResponse(product))
             break;
         default:
             return res.status(405).json({message: 'Method not allowed'})
