@@ -8,7 +8,7 @@ import {
     DEFAULT_SORT_DIRECTION,
     DEFAULT_SORT_FIELD
 } from "@/helpers/constants";
-import {createOrUpdateProduct, loadProductValidation} from "@/validations/product.validation";
+import {loadProductValidation, validateProductCreate} from "@/validations/product.validation";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     switch (req.method) {
@@ -20,27 +20,32 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             }
 
             const parameter = {
-                limit: Number(req.query?.limit) ?? DEFAULT_PAGINATION_LIMIT,
-                page: Number(req.query?.page) ?? DEFAULT_PAGINATION_PAGE,
-                min: Number(req.query?.minPrice),
-                max: Number(req.query?.maxPrice),
-                q: req.query?.q as string,
-                sort: req.query?.sort as string ?? DEFAULT_SORT_FIELD,
-                direction: Number(req?.query.order) ?? DEFAULT_SORT_DIRECTION,
+                limit: req.query?.limit ? Number(req.query.limit) : DEFAULT_PAGINATION_LIMIT,
+                page: req.query?.page ? Number(req.query.page) : DEFAULT_PAGINATION_PAGE,
+                min: req.query?.minPrice ?  Number(req.query.minPrice) : undefined,
+                max: req.query?.maxPrice ? Number(req.query.maxPrice) : undefined,
+                q: req.query?.q ? req.query.q  as string : undefined,
+                sort: req.query?.sort ? req.query.sort as string : DEFAULT_SORT_FIELD,
+                direction: req.query?.sort ? Number(req.query.order) : DEFAULT_SORT_DIRECTION,
             }
 
             const {products, total} = await loadProducts(parameter);
 
-            res.json(PaginationResponse({
-                req,
-                page: parameter.page,
-                limit: parameter.limit,
-                count: total,
-                data: products
-            }))
+            try {
+                res.status(200).json(PaginationResponse({
+                    req,
+                    page: parameter.page,
+                    limit: parameter.limit,
+                    count: total,
+                    data: products
+                }))
+            } catch (err: any) {
+                res.status(500).json({ message: err.message})
+            }
+
             break;
         case 'POST':
-            const {error, value} = createOrUpdateProduct.validate(req.body);
+            const {error, value} = validateProductCreate.validate(req.body);
             if (error)
                 res.status(422).json({error: 'Validation error', message: error.message})
 

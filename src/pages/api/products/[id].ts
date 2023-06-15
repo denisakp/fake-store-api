@@ -1,6 +1,6 @@
 import {NextApiRequest, NextApiResponse} from "next";
 import {deleteProduct, loadProduct, updateProduct} from "@/services/product.service";
-import {createOrUpdateProduct} from "@/validations/product.validation";
+import {validateProductUpdate} from "@/validations/product.validation";
 import transformResponse from "@/helpers/transform-response";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -15,11 +15,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             res.json(transformResponse(product));
             break;
         case 'PATCH':
-            const {error, value} = createOrUpdateProduct.validate(req.body);
+            const {error, value} = validateProductUpdate.validate(req.body);
             if (error)
                 res.status(422).json({error: 'Validation error', message: error.message});
 
-            const updated = await updateProduct(docRef, value);
+            const updated = updateProduct(docRef, value);
             if(!updated)
                 res.status(400).json({ message: "Product with reference '" + docRef + "' not found !" });
 
