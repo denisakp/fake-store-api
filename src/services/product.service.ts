@@ -2,6 +2,7 @@ import connectToDB from "@/lib/mongodb";
 import {productQueryBuilder} from "@/helpers/queries-builder";
 import {ObjectId} from "bson";
 import {ProductInterface, ProductQueryBuilderParameter} from "@/interfaces/product.interface";
+import {DUMMY_PRODUCT} from "@/helpers/constants";
 
 /**
  * Load products resources
@@ -39,7 +40,7 @@ export async function loadProduct(docRef: string) {
     if (!docRefOi || !docRefOi.equals(productOi))
         return;
 
-    return dummyProduct;
+    return DUMMY_PRODUCT;
 }
 
 /**
@@ -62,7 +63,7 @@ export function updateProduct(docRef: string, data: ProductInterface) {
     if (!docRefOi || !docRefOi.equals(productOi))
         return;
 
-    return {...dummyProduct, ...data}
+    return {...DUMMY_PRODUCT, ...data}
 }
 
 /**
@@ -74,23 +75,4 @@ export async function deleteProduct(docRef: string): Promise<boolean> {
     const product_oi = new ObjectId('64858a3114c402ee08ec6293');
 
     return !(!docRef_oi || !docRef_oi.equals(product_oi));
-}
-
-const dummyProduct = {
-    "_id": "64858a3114c402ee08ec6293",
-    "name": "iPhone X",
-    "description": "The iPhone X is a smartphone designed, developed and marketed by Apple Inc. It is part of the eleventh generation of the iPhone",
-    "stock": 13,
-    "price": 450.99,
-    "images": [
-        "https://fakestoreapi.denisakp.me/static/products/1/1.jpg",
-        "https://fakestoreapi.denisakp.me/static/products/1/1.jpg",
-        "https://fakestoreapi.denisakp.me/static/products/1/1.jpg",
-        "https://fakestoreapi.denisakp.me/static/products/1/1.jpg"
-    ],
-    "categories": [
-        "smartphone",
-        "iphone"
-    ],
-    "sku": "2023060001"
 }
