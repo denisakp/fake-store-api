@@ -5,13 +5,11 @@ import {ObjectId} from "bson";
  * Load categories resources
  */
 export const loadCategories = async () => {
-    const {client, db} = await connectToDB();
+    const db = await connectToDB();
     try {
         return await db.collection("categories").find({}).toArray()
     } catch (e) {
         throw new Error('Cannot load categories resources !');
-    } finally {
-        await client.close();
     }
 }
 

@@ -8,7 +8,7 @@ import {ObjectId} from "bson";
  * @param query
  */
 export async function loadOrders(query: OrderQueryBuilderParameter) {
-    const {client, db} = await connectToDB();
+    const db = await connectToDB();
     try {
         const {options, sort, skip} = orderQueryBuilder(query);
 
@@ -19,8 +19,6 @@ export async function loadOrders(query: OrderQueryBuilderParameter) {
         return {orders, total};
     } catch (e) {
         throw new Error('Failed to load orders resources !');
-    } finally {
-        await client.close();
     }
 }
 
@@ -29,7 +27,7 @@ export async function loadOrders(query: OrderQueryBuilderParameter) {
  * @param docRef
  */
 export async function loadOrder(docRef: string) {
-    const {client, db} = await connectToDB();
+    const db = await connectToDB();
     try {
         const order = await db.collection('orders').findOne({_id: new ObjectId(docRef)});
 
@@ -39,8 +37,6 @@ export async function loadOrder(docRef: string) {
         return order;
     } catch (e) {
         throw new Error('Failed to load order resource with reference: ' + docRef);
-    } finally {
-        await client.close();
     }
 }
 

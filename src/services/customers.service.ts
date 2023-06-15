@@ -10,7 +10,7 @@ import {SITE_URL} from "@/helpers/constants";
  * @param query
  */
 export async function loadCustomers(query: CustomerQueryBuilderParameter) {
-    const {client, db} = await connectToDB();
+    const db = await connectToDB();
     try {
         const {options, sort, skip} = customerQueryBuilder(query);
 
@@ -20,8 +20,6 @@ export async function loadCustomers(query: CustomerQueryBuilderParameter) {
         return {customers, total};
     } catch (e) {
         throw new Error('Failed to load customers resources !');
-    } finally {
-        await client.close();
     }
 }
 
@@ -30,7 +28,7 @@ export async function loadCustomers(query: CustomerQueryBuilderParameter) {
  * @param docRef
  */
 export async function loadCustomer(docRef: string) {
-    const {client, db} = await connectToDB();
+    const db = await connectToDB();
     try {
         const customer = await db.collection("customers").findOne({_id: new ObjectId(docRef)});
 
@@ -43,8 +41,6 @@ export async function loadCustomer(docRef: string) {
         };
     } catch (e) {
         throw new Error('Failed to load customer with docRef: ' + docRef);
-    } finally {
-        await client.close();
     }
 }
 
@@ -54,7 +50,7 @@ export async function loadCustomer(docRef: string) {
  * @param query
  */
 export async function loadCustomerOrders(docRef: string, query: OrderQueryBuilderParameter) {
-    const {client, db} = await connectToDB();
+    const db = await connectToDB();
     try {
         const docRef_oi = new ObjectId(docRef);
         const customer_oi = new ObjectId('6485c35814c402ee08ec6294');
@@ -71,8 +67,6 @@ export async function loadCustomerOrders(docRef: string, query: OrderQueryBuilde
 
     } catch (e) {
         throw new Error('Failed to load orders for customer with docRef: ' + docRef);
-    } finally {
-        await client.close();
     }
 }
 
