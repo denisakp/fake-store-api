@@ -1,4 +1,4 @@
-import {Db, MongoClient, ServerApiVersion} from 'mongodb';
+import {MongoClient, ServerApiVersion} from 'mongodb';
 
 if (!process.env.MONGODB_URI) {
     throw new Error('Please add your Mongo URI to .env')
