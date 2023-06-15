@@ -13,13 +13,14 @@ export default function PaginationResponse(params: Parameter): Response {
 
     const hasNextPage = params.page < totalPage;
 
-    const previousPage: string | null = params.page > 1 ? url.replace(`page=${params.page}`, `page=${params.page + 1}`) : null;
+    const previousPage: string | null = params.page > 1 ? url.replace(`page=${params.page}`, `page=${params.page - 1}`) : null;
 
-    const nextPage: string | null = hasNextPage ? url.replace(`page=${params.page}`, `page=${params.page - 1}`) : null;
+    const nextPage: string | null = hasNextPage ? url.replace(`page=${params.page}`, `page=${params.page + 1}`) : null;
 
     return {
         data: transformResponse(params.data),
         total: params.count,
+        perPage: params.limit,
         currentPage: params.page,
         hasNextPage,
         previousPage,
@@ -38,6 +39,7 @@ interface Parameter {
 interface Response {
     data: object,
     total: number;
+    perPage: number;
     currentPage: number;
     hasNextPage: boolean;
     previousPage: string | null;
