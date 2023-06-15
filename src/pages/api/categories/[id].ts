@@ -8,10 +8,9 @@ export default async function handler (req: NextApiRequest, res: NextApiResponse
 
     switch (req.method) {
         case 'GET':
-            const product = await loadCategory(docRef);
+            const product = loadCategory(docRef);
             if(!product)
                 res.status(400).json({message: "Category with reference '" + docRef + "' not found !"});
-
             res.json(transformResponse(product));
             break;
         case 'PATCH':
