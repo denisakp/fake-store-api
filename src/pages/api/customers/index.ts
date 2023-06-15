@@ -14,22 +14,27 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             }
 
             const parameter = {
-                limit: Number(req.query?.limit) ?? DEFAULT_PAGINATION_LIMIT,
-                page: Number(req.query?.page) ?? DEFAULT_PAGINATION_PAGE,
-                sort: req.query?.sort as string ?? 'created_datetime',
-                direction: Number(req?.query.order) ?? DEFAULT_SORT_DIRECTION,
-                q: req?.query.q as string,
+                limit: req.query?.limit ? Number(req.query.limit) : DEFAULT_PAGINATION_LIMIT,
+                page: req.query?.page ? Number(req.query.page) : DEFAULT_PAGINATION_PAGE,
+                sort: req.query?.sort ? req.query.sort as string : 'created_datetime',
+                direction: req?.query.order ? Number(req.query.order) : DEFAULT_SORT_DIRECTION,
+                q: req?.query.q ? req?.query.q as string : undefined
             }
 
             const {customers, total} = await loadCustomers(parameter);
 
-            res.json(PaginationResponse({
-                req,
-                page: parameter.page,
-                limit: parameter.limit,
-                count: total,
-                data: customers
-            }));
+            try {
+                res.status(200).json(PaginationResponse({
+                    req,
+                    page: parameter.page,
+                    limit: parameter.limit,
+                    count: total,
+                    data: customers
+                }));
+            } catch (e) {
+                res.status(500).json(e)
+            }
+
             break;
         default:
             res.status(405).json({message: 'Method not allowed'})

@@ -23,4 +23,32 @@ export const DUMMY_PRODUCT = {
         "iphone"
     ],
     "sku": "2023060001"
-}
+};
+export const DUMMY_CUSTOMER = {
+    "_id": "6485c35814c402ee08ec6294",
+    "name": "John Doe",
+    "email": "john.doe@site.com",
+    "address": {
+        "delivery": [
+            {
+                "city": "London",
+                "street": "Abbey Road",
+                "number": "365",
+                "zipCode": "Dublin, D13",
+                "country": "United Kindom",
+                "phone": "01632960297"
+            }
+        ],
+        "billing": [
+            {
+                "city": "London",
+                "street": "Abbey Road",
+                "number": "365",
+                "zipCode": "Dublin, D13",
+                "country": "United Kindom",
+                "phone": "01632960297"
+            }
+        ]
+    },
+    "password": "$2y$10$Qz9GPIgvovm3wfiBxze3Dey8wPZ0H8tC9.fH.zUhjj6uWI3.5144K"
+};

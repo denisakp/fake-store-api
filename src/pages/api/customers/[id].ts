@@ -1,7 +1,7 @@
 import {NextApiRequest, NextApiResponse} from "next";
 import {loadCustomer, updateCustomer} from "@/services/customers.service";
 import transformResponse from "@/helpers/transform-response";
-import {createOrUpdateCustomer} from "@/validations/customer.validation";
+import {validateUploadCustomer} from "@/validations/customer.validation";
 import {loadOrderValidation} from "@/validations/order.validation";
 import {DEFAULT_PAGINATION_LIMIT, DEFAULT_PAGINATION_PAGE, DEFAULT_SORT_DIRECTION, SITE_URL} from "@/helpers/constants";
 import {loadOrders} from "@/services/orders.service";
@@ -22,14 +22,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 }
 
                 const parameter = {
-                    limit: Number(req.query?.limit) ?? DEFAULT_PAGINATION_LIMIT,
-                    page: Number(req.query?.page) ?? DEFAULT_PAGINATION_PAGE,
-                    sort: req.query?.sort as string ?? 'created_datetime',
-                    direction: Number(req?.query.order) ?? DEFAULT_SORT_DIRECTION,
+                    limit: req.query?.limit ? Number(req.query.limit) : DEFAULT_PAGINATION_LIMIT,
+                    page: req.query?.page ? Number(req.query.page) : DEFAULT_PAGINATION_PAGE,
+                    sort: req.query?.sort ?  req.query.sort as string : 'created_datetime',
+                    direction: req?.query.order ? Number(req.query.order) : DEFAULT_SORT_DIRECTION,
                     startDate: new Date('2023-06-01'),
                     endDate: new Date('2023-06-30'),
-                    startPrice: Number(req.query?.startPrice),
-                    endPrice: Number(req.query?.endPrice),
+                    startPrice: req.query?.startPrice ? Number(req.query.startPrice) : undefined,
+                    endPrice: req.query?.endPrice ? Number(req.query.endPrice) : undefined,
                 }
 
                 const {orders, total} = await loadOrders(parameter);
@@ -42,7 +42,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     data: orders
                 })
 
-                res.json({customer: SITE_URL + path[0], orders: response});
+                try {
+                    res.status(200).json({customer: SITE_URL + path[0], ...response});
+
+                }catch (e) {
+                    res.status(500).json(e)
+                }
+
                 break;
             }
 
@@ -53,11 +59,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             res.json(transformResponse(customer));
             break;
         case 'PATCH':
-            const {error, value} = createOrUpdateCustomer.validate(req.body);
+            const {error, value} = validateUploadCustomer.validate(req.body);
             if (error)
                 res.status(422).json({error: 'Validation error', message: error.message});
 
-            const updated = await updateCustomer(docRef, value);
+            const updated = updateCustomer(docRef, value);
             if (!updated)
                 res.status(400).json({message: "Customer with reference '" + docRef + "' not found !"});
 

@@ -15,6 +15,7 @@ export interface CustomerQueryBuilderResponse {
 export interface CustomerInterface {
     name: string;
     email: string;
+    password: string;
     address?: {
         delivery?: Array<AddressInterface>,
         billing?: Array<AddressInterface>,

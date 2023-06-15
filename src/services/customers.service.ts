@@ -3,7 +3,8 @@ import {ObjectId} from "bson";
 import {customerQueryBuilder, orderQueryBuilder} from "@/helpers/queries-builder";
 import {CustomerInterface, CustomerQueryBuilderParameter} from "@/interfaces/customer.interface";
 import {OrderQueryBuilderParameter} from "@/interfaces/order.interface";
-import {SITE_URL} from "@/helpers/constants";
+import {DUMMY_CUSTOMER} from "@/helpers/constants";
+import maskProperty from "@/helpers/mask-property";
 
 /**
  * Load customers resources
@@ -15,10 +16,20 @@ export async function loadCustomers(query: CustomerQueryBuilderParameter) {
         const {options, sort, skip} = customerQueryBuilder(query);
 
         const total: number = await db.collection("customers").countDocuments(options);
-        const customers = await db.collection("customers").find(options).limit(query.limit).skip(skip).sort(sort).toArray()
+
+        const excludes = {password: 0}
+
+        const customers = await db
+            .collection("customers")
+            .find(options)
+            .project(excludes)
+            .limit(query.limit)
+            .skip(skip)
+            .sort(sort)
+            .toArray()
 
         return {customers, total};
-    } catch (e) {
+    } catch (e: any) {
         throw new Error('Failed to load customers resources !');
     }
 }
@@ -28,20 +39,13 @@ export async function loadCustomers(query: CustomerQueryBuilderParameter) {
  * @param docRef
  */
 export async function loadCustomer(docRef: string) {
-    const db = await connectToDB();
-    try {
-        const customer = await db.collection("customers").findOne({_id: new ObjectId(docRef)});
+    const docRef_oi = new ObjectId(docRef);
+    const product_oi = new ObjectId('6485c35814c402ee08ec6294');
 
-        if (!customer)
-            return;
+    if(!docRef_oi || !docRef_oi.equals(product_oi))
+        return;
 
-        return {
-            ...customer,
-            orders: SITE_URL +'/customers/' + docRef + '/orders'
-        };
-    } catch (e) {
-        throw new Error('Failed to load customer with docRef: ' + docRef);
-    }
+    return maskProperty(DUMMY_CUSTOMER, ['password']);
 }
 
 /**
@@ -75,7 +79,10 @@ export async function loadCustomerOrders(docRef: string, query: OrderQueryBuilde
  * @param data
  */
 export async function createCustomer(data: CustomerInterface) {
-    return {_id: new ObjectId(), ...data}
+    const customer = maskProperty(DUMMY_CUSTOMER, ['password']);
+    const _data = maskProperty(data, ['password'] );
+
+    return {...customer, ..._data}
 }
 
 /**
@@ -83,12 +90,15 @@ export async function createCustomer(data: CustomerInterface) {
  * @param docRef
  * @param data
  */
-export async function updateCustomer(docRef: string, data: CustomerInterface) {
+export function updateCustomer(docRef: string, data: CustomerInterface) {
     const docRef_oi = new ObjectId(docRef);
     const product_oi = new ObjectId('6485c35814c402ee08ec6294');
 
     if(!docRef_oi || !docRef_oi.equals(product_oi))
         return;
 
-    return {_id: docRef_oi, ...data}
+    const customer = maskProperty(DUMMY_CUSTOMER, ['password']);
+    const _data = maskProperty(data, ['password'] );
+
+    return { ...customer, ..._data}
 }
