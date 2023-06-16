@@ -5,15 +5,13 @@ export const loginValidation = Joi.object({
     password: Joi.string().required()
 });
 
+export const registerValidation = Joi.object({
+    email: Joi.string().required(),
+    password: Joi.string().required(),
+    name: Joi.string().required()
+});
+
 export const updatePasswordValidation =  Joi.object({
     current: Joi.string().required().label('current password'),
-    new_password: Joi
-        .string()
-        .min(8)
-        .valid(Joi.ref('current'))
-        .label('password confirmation')
-        .messages({
-            'any.only': '{{#label}} does not match'
-        })
-        .required()
+    password: Joi.string().min(8).required()
 });

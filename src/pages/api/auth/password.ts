@@ -9,13 +9,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             if (error)
                 res.status(422).json({error: 'Validation Error', message: error});
 
-            const {current, new_password} = value;
+            const {current, password} = value;
 
-            const created = await changePassword(current, new_password);
+            const created = changePassword(current, password);
             if (!created)
                 res.status(400).json({message: 'Password does not match !'});
 
-            res.status(204);
+            res.status(204).json({});
             break;
         default:
             res.status(405).json({message: 'Method not allowed'});

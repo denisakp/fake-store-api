@@ -5,11 +5,11 @@ import {login} from "@/services/auth.service";
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     switch (req.method) {
         case 'POST':
-            const {error} = loginValidation.validate(req.body);
+            const {error, value} = loginValidation.validate(req.body);
             if (error)
                 res.status(422).json({error: 'Validation Error', message: error});
 
-            const authenticated = await login(req.body.email, req.body.password);
+            const authenticated = login(value.email, value.password);
             if (!authenticated)
                 res.status(400).json({message: 'Unknown credentials !'})
 

@@ -1,35 +1,37 @@
-import {DEFAULT_EMAIL, DEFAULT_JWT_SECRET, DEFAULT_PASSWORD} from "@/helpers/constants";
-import {createCustomer} from "@/services/customers.service";
+import {DEFAULT_EMAIL, DEFAULT_JWT_SECRET, DEFAULT_PASSWORD, DUMMY_CUSTOMER} from "@/helpers/constants";
 import jwt from "jsonwebtoken";
 import {CustomerInterface} from "@/interfaces/customer.interface";
+import maskProperty from "@/helpers/mask-property";
 
 /**
  * Authenticate a given customer
  * @param email
  * @param password
  */
-export async function login(email: string, password: string) {
-    if (!email.localeCompare(DEFAULT_EMAIL) || !password.localeCompare(DEFAULT_PASSWORD) )
+export function login(email: string, password: string) {
+    if (email.localeCompare(DEFAULT_EMAIL) < 0 || password.localeCompare(DEFAULT_PASSWORD) < 0 )
         return;
-
     return generateToken();
 }
 
 /**
  * Change customer password
  * @param current
- * @param new_one
+ * @param password
  */
-export async function changePassword(current: string, new_one: string) {
-    return current.localeCompare(DEFAULT_PASSWORD) && new_one.length > 6
+export function changePassword(current: string, password: string) {
+    return current === DEFAULT_PASSWORD && password;
 }
 
 /**
  * Register a new customer
  * @param data
  */
-export async function register(data: CustomerInterface) {
-    return await createCustomer(data);
+export function register(data: CustomerInterface) {
+    const customer = maskProperty(DUMMY_CUSTOMER, ['password', 'address']);
+    const _data = maskProperty(data, ['password'] );
+
+    return {...customer, ..._data}
 }
 
 export function generateToken() {

@@ -51,17 +51,6 @@ export async function loadCustomer(docRef: string) {
 }
 
 /**
- * Create a new customer resource
- * @param data
- */
-export async function createCustomer(data: CustomerInterface) {
-    const customer = maskProperty(DUMMY_CUSTOMER, ['password']);
-    const _data = maskProperty(data, ['password'] );
-
-    return {...customer, ..._data}
-}
-
-/**
  * Update customer resource
  * @param docRef
  * @param data
