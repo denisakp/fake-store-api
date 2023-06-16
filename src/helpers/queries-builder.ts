@@ -64,8 +64,8 @@ export function orderQueryBuilder(query: OrderQueryBuilderParameter): OrderQuery
 
     if(query.startPrice && query.endPrice) {
         options['created_datetime'] = {
-            $gte: query?.startDate,
-            $lte: query?.endDate
+            $gte: query.startDate,
+            $lte: query.endDate
         }
 
         options['total_price'] = {
@@ -73,9 +73,9 @@ export function orderQueryBuilder(query: OrderQueryBuilderParameter): OrderQuery
             $lte: query.endPrice,
         }
     } else {
-        options['createdDatetime'] = {
-            $gte: query?.startDate,
-            $lte: query?.endDate
+        options['created_datetime'] = {
+            $gte: query.startDate,
+            $lte: query.endDate
         };
     }
 

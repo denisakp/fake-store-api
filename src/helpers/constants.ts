@@ -4,7 +4,7 @@ export const DEFAULT_SORT_FIELD = "name";
 export const DEFAULT_SORT_DIRECTION = -1;
 export const DEFAULT_EMAIL = process.env.USER_EMAIL as string;
 export const DEFAULT_PASSWORD = process.env.USER_PASSWORD as string;
-export const DEFAULT_JWT_SECRET="fake-store-api-secret"
+export const DEFAULT_JWT_SECRET = "fake-store-api-secret"
 export const SITE_URL = process.env.SITE_URL as string;
 export const DUMMY_PRODUCT = {
     "_id": "64858a3114c402ee08ec6293",
@@ -52,3 +52,19 @@ export const DUMMY_CUSTOMER = {
     },
     "password": "$2y$10$Qz9GPIgvovm3wfiBxze3Dey8wPZ0H8tC9.fH.zUhjj6uWI3.5144K"
 };
+export const DUMMY_ORDER = {
+    "_id": "6485d7a45562163f95c6e3e2",
+    "customer": "6485c35814c402ee08ec6294",
+    "products": [
+        {
+            "sku": "2023060001",
+            "name": "Iphone X",
+            "quantity": 1,
+            "price": 450.99
+        }
+    ],
+    "total_products": 1,
+    "total_quantity": 1,
+    "total_amount": 459.99,
+    "created_datetime": "2023-06-01T00:00:00.000+00:00"
+}

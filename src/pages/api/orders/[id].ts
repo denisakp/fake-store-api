@@ -1,7 +1,6 @@
 import {NextApiRequest, NextApiResponse} from "next";
-import {loadOrder, updateOrder} from "@/services/orders.service";
-import {createOrUpdateOrder} from "@/validations/order.validation";
-import {deleteProduct} from "@/services/product.service";
+import {deleteOrder, loadOrder, updateOrder} from "@/services/orders.service";
+import {validateOrderUpdate} from "@/validations/order.validation";
 import transformResponse from "@/helpers/transform-response";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -9,29 +8,40 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     switch (req.method) {
         case 'GET':
-            const order = await loadOrder(docRef);
-            if(!order)
-                res.status(400).json({message: "Order with reference '" + docRef + "' not found !"});
-
-            res.json(transformResponse(order));
+            try {
+                const order = await loadOrder(docRef);
+                if(!order)
+                    res.status(400).json({message: "Order with reference '" + docRef + "' not found !"});
+                res.json(transformResponse(order));
+            } catch (e: any) {
+                res.status(400).json({message: e.message})
+            }
             break;
         case 'PATCH':
-            const {error, value} = createOrUpdateOrder.validate(req.body);
+            const {error, value} = validateOrderUpdate.validate(req.body);
             if (error)
                 res.status(422).json({error: 'Validation error', message: error.message});
 
-            const updated = await updateOrder(docRef, value);
-            if(!updated)
-                res.status(400).json({ message: "Order with reference '" + docRef + "' not found !" });
-
-            res.json(transformResponse(updated));
+            try {
+                const updated = await updateOrder(docRef, value);
+                if(!updated)
+                    res.status(400).json({ message: "Order with reference '" + docRef + "' not found !" });
+                res.json(transformResponse(updated));
+            } catch (e: any) {
+                res.status(400).json({message: e.message})
+            }
             break;
         case 'DELETE':
-            const success = await deleteProduct(docRef);
-            if(!success)
-                res.status(400).json({message: "Order with reference '" + docRef + "' not found !"});
+            try {
+                const success =  deleteOrder(docRef);
+                if(!success)
+                    res.status(400).json({message: "Order with reference '" + docRef + "' not found !"});
 
-            res.status(204)
+                res.status(204).json(docRef)
+            } catch (e: any) {
+                res.status(400).json({message: e.message})
+            }
+
             break;
         default:
             res.status(405).json({message: 'Method not allowed'})

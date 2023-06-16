@@ -2,6 +2,7 @@ import connectToDB from "@/lib/mongodb";
 import {orderQueryBuilder} from "@/helpers/queries-builder";
 import {OrderInterface, OrderQueryBuilderParameter} from "@/interfaces/order.interface";
 import {ObjectId} from "bson";
+import {DUMMY_ORDER} from "@/helpers/constants";
 
 /**
  * Load orders resources
@@ -14,7 +15,13 @@ export async function loadOrders(query: OrderQueryBuilderParameter) {
 
         const total: number = await db.collection("orders").countDocuments(options);
 
-        const orders = await db.collection("orders").find(options).limit(query.limit).skip(skip).sort(sort).toArray()
+        const orders = await db
+            .collection("orders")
+            .find(options)
+            .limit(query.limit)
+            .skip(skip)
+            .sort(sort)
+            .toArray()
 
         return {orders, total};
     } catch (e) {
@@ -26,38 +33,40 @@ export async function loadOrders(query: OrderQueryBuilderParameter) {
  * Load an order resource by its docRef
  * @param docRef
  */
-export async function loadOrder(docRef: string) {
-    const db = await connectToDB();
+export function loadOrder(docRef: string) {
     try {
-        const order = await db.collection('orders').findOne({_id: new ObjectId(docRef)});
+        const docRef_oi = new ObjectId(docRef);
+        const order_oi = new ObjectId('6485d7a45562163f95c6e3e2');
 
-        if (!order)
+        if (!docRef_oi || !docRef_oi.equals(order_oi))
             return;
 
-        return order;
+        return DUMMY_ORDER;
     } catch (e) {
-        throw new Error('Failed to load order resource with reference: ' + docRef);
+        throw new Error("Argument '" + docRef + "' passed in must be a string of 12 bytes or a string of 24 hex characters or an integer");
     }
+
 }
 
 /**
  * Create a new order resource
  * @param data
  */
-export async function createOrder(data: OrderInterface) {
+export function createOrder(data: OrderInterface) {
     const customer_oi = new ObjectId(data.customer);
-    const john_oi = new ObjectId('6485c35814c402ee08ec6294');
-
-    if (!customer_oi || customer_oi.equals(john_oi))
+    if (!customer_oi || !customer_oi.equals('6485c35814c402ee08ec6294'))
         return;
 
-    return {
+    const _data = {
         ...data,
+        _id: new ObjectId(),
         total_products: data.products.length,
         total_quantity: data.products.reduce((total, product) => total + product.quantity, 0),
         total_amount: data.products.reduce((total, product) => total + (product.quantity * product.price), 0),
         created_datetime: new Date(),
     }
+
+    return {...DUMMY_ORDER, ..._data}
 }
 
 /**
@@ -65,28 +74,42 @@ export async function createOrder(data: OrderInterface) {
  * @param docRef
  * @param data
  */
-export async function updateOrder(docRef: string, data: OrderInterface) {
-    const customer_oi = new ObjectId(data.customer);
-    const john_oi = new ObjectId('6485c35814c402ee08ec6294');
-    if (!customer_oi || customer_oi.equals(john_oi))
-        return;
+export function updateOrder(docRef: string, data: OrderInterface) {
+    try {
+        const customer_oi = new ObjectId(data.customer);
+        if (!customer_oi || customer_oi.equals('6485c35814c402ee08ec6294'))
+            return;
 
-    const order_oi = new ObjectId(docRef);
-    if (!order_oi || !order_oi.equals('6485d7a45562163f95c6e3e2'))
-        return;
+        const order_oi = new ObjectId(docRef);
+        if (!order_oi || !order_oi.equals('6485d7a45562163f95c6e3e2'))
+            return;
 
-    return {
-        ...data,
-        total_products: data.products.length,
-        total_quantity: data.products.reduce((total, product) => total + product.quantity, 0),
-        total_amount: data.products.reduce((total, product) => total + (product.quantity * product.price), 0),
-        created_datetime: new Date(),
+        const _data = {
+            ...data,
+            total_products: data.products.length,
+            total_quantity: data.products.reduce((total, product) => total + product.quantity, 0),
+            total_amount: data.products.reduce((total, product) => total + (product.quantity * product.price), 0),
+            created_datetime: new Date(),
+        }
+
+        return {...DUMMY_ORDER, ..._data}
+    }catch (e) {
+        throw new Error("Argument '" + docRef + "' passed in must be a string of 12 bytes or a string of 24 hex characters or an integer");
     }
 }
 
-export async function deleteOrder(docRef: string) {
-    const docRef_oi = new ObjectId(docRef);
-    const order_oi = new ObjectId('6485d7a45562163f95c6e3e2');
+/**
+ *
+ * @param docRef
+ */
+export function deleteOrder(docRef: string) {
+    try {
+        const docRef_oi = new ObjectId(docRef);
+        if(!docRef_oi || !docRef_oi.equals('6485d7a45562163f95c6e3e2'))
+            return;
 
-    return !(!docRef_oi || !docRef_oi.equals(order_oi));
+        return true;
+    }catch (e) {
+        throw new Error("Argument '" + docRef + "' passed in must be a string of 12 bytes or a string of 24 hex characters or an integer");
+    }
 }
