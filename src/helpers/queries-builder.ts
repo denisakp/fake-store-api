@@ -55,12 +55,6 @@ export function orderQueryBuilder(query: OrderQueryBuilderParameter): OrderQuery
     const skip = (page - 1) * limit;
 
     let options: any = {};
-    let sort: any = {};
-
-    if (query.sort && query.direction)
-        sort[query.sort] = query.direction
-    else
-        sort['created_datetime'] = -1;
 
     if(query.startPrice && query.endPrice) {
         options['created_datetime'] = {
@@ -79,7 +73,7 @@ export function orderQueryBuilder(query: OrderQueryBuilderParameter): OrderQuery
         };
     }
 
-    return {options, sort, skip};
+    return {options, skip};
 }
 
 /**

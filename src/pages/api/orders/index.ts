@@ -17,8 +17,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             const parameter = {
                 limit: req.query?.limit ? Number(req.query.limit) : DEFAULT_PAGINATION_LIMIT,
                 page: req.query?.page ? Number(req.query.page) : DEFAULT_PAGINATION_PAGE,
-                sort: req.query?.sort ? req.query.sort as string : 'created_datetime',
-                direction: req?.query.order ? Number(req.query.order) : DEFAULT_SORT_DIRECTION,
                 startDate: new Date('2023-06-01'),
                 endDate: new Date('2023-06-30'),
                 startPrice: req.query?.startPrice ? Number(req.query.startPrice) : undefined,

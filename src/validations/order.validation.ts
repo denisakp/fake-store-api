@@ -19,8 +19,6 @@ export const validateOrderUpdate = Joi.object({
 export const validateOrderLoading = Joi.object({
     limit: Joi.number().integer().optional(),
     page: Joi.number().integer().optional(),
-    sort: Joi.string().optional(),
-    direction: Joi.number().integer().optional(),
     startDate: Joi.date().optional(),
     endDate: Joi.date().optional(),
     startPrice: Joi.number().optional(),

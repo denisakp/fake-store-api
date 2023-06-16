@@ -11,7 +11,7 @@ import {DUMMY_ORDER} from "@/helpers/constants";
 export async function loadOrders(query: OrderQueryBuilderParameter) {
     const db = await connectToDB();
     try {
-        const {options, sort, skip} = orderQueryBuilder(query);
+        const {options, skip} = orderQueryBuilder(query);
 
         const total: number = await db.collection("orders").countDocuments(options);
 
@@ -20,7 +20,6 @@ export async function loadOrders(query: OrderQueryBuilderParameter) {
             .find(options)
             .limit(query.limit)
             .skip(skip)
-            .sort(sort)
             .toArray()
 
         return {orders, total};

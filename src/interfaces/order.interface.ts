@@ -5,14 +5,11 @@ export interface OrderQueryBuilderParameter {
     page: number;
     startPrice?: number;
     endPrice?: number;
-    sort: string;
-    direction: number;
 }
 
 export interface OrderQueryBuilderResponse {
     skip: number;
     options: object;
-    sort: any;
 }
 
 export interface OrderInterface {
