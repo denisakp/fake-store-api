@@ -21,9 +21,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 q: req?.query.q ? req?.query.q as string : undefined
             }
 
-            const {customers, total} = await loadCustomers(parameter);
-
             try {
+                const {customers, total} = await loadCustomers(parameter);
+
                 res.status(200).json(PaginationResponse({
                     req,
                     page: parameter.page,
@@ -31,10 +31,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     count: total,
                     data: customers
                 }));
-            } catch (e) {
-                res.status(500).json(e)
+            } catch (e: any) {
+                res.status(500).json({message: e.message})
             }
-
             break;
         default:
             res.status(405).json({message: 'Method not allowed'})

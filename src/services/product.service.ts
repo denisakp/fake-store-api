@@ -33,21 +33,23 @@ export async function loadProducts(query: ProductQueryBuilderParameter) {
  * Load a single product by its docRef
  * @param docRef
  */
-export async function loadProduct(docRef: string) {
-    const docRefOi = new ObjectId(docRef);
-    const productOi = new ObjectId('64858a3114c402ee08ec6293');
+export function loadProduct(docRef: string) {
+    try {
+        const docRefOi = new ObjectId(docRef);
+        if (!docRefOi || !docRefOi.equals('64858a3114c402ee08ec6293'))
+            return;
 
-    if (!docRefOi || !docRefOi.equals(productOi))
-        return;
-
-    return DUMMY_PRODUCT;
+        return DUMMY_PRODUCT;
+    } catch (e) {
+        throw new Error("Argument '" + docRef + "' passed in must be a string of 12 bytes or a string of 24 hex characters or an integer");
+    }
 }
 
 /**
  * Create a new product resource
  * @param data
  */
-export async function createProduct(data: ProductInterface) {
+export function createProduct(data: ProductInterface) {
     return {_id: new ObjectId().toString(), ...data}
 }
 
@@ -57,22 +59,30 @@ export async function createProduct(data: ProductInterface) {
  * @param data
  */
 export function updateProduct(docRef: string, data: ProductInterface) {
-    const docRefOi = new ObjectId(docRef);
-    const productOi = new ObjectId('64858a3114c402ee08ec6293');
+    try {
+        const docRefOi = new ObjectId(docRef);
+        if (!docRefOi || !docRefOi.equals('64858a3114c402ee08ec6293'))
+            return;
 
-    if (!docRefOi || !docRefOi.equals(productOi))
-        return;
-
-    return {...DUMMY_PRODUCT, ...data}
+        return {...DUMMY_PRODUCT, ...data}
+    }catch (e) {
+        throw new Error("Argument '" + docRef + "' passed in must be a string of 12 bytes or a string of 24 hex characters or an integer");
+    }
 }
 
 /**
  * Delete a product resource
  * @param docRef
  */
-export async function deleteProduct(docRef: string): Promise<boolean> {
-    const docRef_oi = new ObjectId(docRef);
-    const product_oi = new ObjectId('64858a3114c402ee08ec6293');
+export function deleteProduct(docRef: string) {
+    try {
+        const docRef_oi = new ObjectId(docRef);
 
-    return !(!docRef_oi || !docRef_oi.equals(product_oi));
+        if(!docRef_oi || !docRef_oi.equals('64858a3114c402ee08ec6293'))
+            return;
+
+        return true;
+    } catch (e) {
+        throw new Error("Argument '" + docRef + "' passed in must be a string of 12 bytes or a string of 24 hex characters or an integer");
+    }
 }

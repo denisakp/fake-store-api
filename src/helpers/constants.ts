@@ -67,4 +67,8 @@ export const DUMMY_ORDER = {
     "total_quantity": 1,
     "total_amount": 459.99,
     "created_datetime": "2023-06-01T00:00:00.000+00:00"
+};
+export const DUMMY_CATEGORY = {
+    "_id": '6479065cb337e71eb79da693',
+    "name": "smartphones"
 }

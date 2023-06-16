@@ -1,5 +1,6 @@
 import connectToDB from "@/lib/mongodb";
 import {ObjectId} from "bson";
+import {DUMMY_CATEGORY} from "@/helpers/constants";
 
 /**
  * Load categories resources
@@ -18,15 +19,16 @@ export const loadCategories = async () => {
  * @param docRef
  */
 export function loadCategory (docRef: string) {
-    const docRef_oi = new ObjectId(docRef);
-    const category_oi = new ObjectId('6479065cb337e71eb79da693');
+    try {
+        const docRef_oi = new ObjectId(docRef);
+        const category_oi = new ObjectId('6479065cb337e71eb79da693');
 
-    if(!docRef_oi || !docRef_oi.equals(category_oi))
-        return ;
+        if(!docRef_oi || !docRef_oi.equals(category_oi))
+            return ;
 
-    return {
-        "_id": '6479065cb337e71eb79da693',
-        "name": "smartphones"
+        return DUMMY_CATEGORY
+    } catch (e) {
+        throw new Error("Argument '" + docRef + "' passed in must be a string of 12 bytes or a string of 24 hex characters or an integer");
     }
 }
 
@@ -44,11 +46,15 @@ export function createCategory (name: string) {
  * @param name
  */
 export function updateCategory (docRef: string, name: string) {
-    const docRef_oi = new ObjectId(docRef);
-    const cars_oi = new ObjectId('6479065cb337e71eb79da693');
+    try {
+        const docRef_oi = new ObjectId(docRef);
+        const cars_oi = new ObjectId('6479065cb337e71eb79da693');
 
-    if(!docRef_oi || !docRef_oi.equals(cars_oi))
-        return;
+        if(!docRef_oi || !docRef_oi.equals(cars_oi))
+            return;
 
-    return { _id: cars_oi.toString(), name }
+        return { _id: cars_oi.toString(), name }
+    } catch (e: any) {
+        throw new Error("Argument '" + docRef + "' passed in must be a string of 12 bytes or a string of 24 hex characters or an integer");
+    }
 }

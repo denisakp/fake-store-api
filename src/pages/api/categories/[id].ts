@@ -8,10 +8,15 @@ export default async function handler (req: NextApiRequest, res: NextApiResponse
 
     switch (req.method) {
         case 'GET':
-            const product = loadCategory(docRef);
-            if(!product)
-                res.status(400).json({message: "Category with reference '" + docRef + "' not found !"});
-            res.json(transformResponse(product));
+            try {
+                const category = loadCategory(docRef);
+                if(!category)
+                    res.status(400).json({message: "Category with reference '" + docRef + "' not found !"});
+
+                res.json(transformResponse(category));
+            } catch (e:any) {
+                res.status(500).json({message: e.message})
+            }
             break;
         case 'PATCH':
             const { name } = req.body;
@@ -20,11 +25,15 @@ export default async function handler (req: NextApiRequest, res: NextApiResponse
             if (error)
                 res.status(422).json({error: 'Validation Error', message: error});
 
-            const updated = updateCategory(docRef, name);
-            if(!updated)
-                res.status(400).json({message: "Category with reference '" + docRef + "' not found !"});
+            try {
+                const updated = updateCategory(docRef, name);
+                if(!updated)
+                    res.status(400).json({message: "Category with reference '" + docRef + "' not found !"});
 
-            res.json(transformResponse(updated));
+                res.json(transformResponse(updated));
+            }catch (e: any) {
+                res.status(400).json({message: e.message})
+            }
             break;
         default:
             res.status(405).json({message: 'Method not allowed'});

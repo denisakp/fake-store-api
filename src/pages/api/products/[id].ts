@@ -8,29 +8,41 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     switch (req.method) {
         case 'GET':
-            const product = await loadProduct(docRef);
-            if (!product)
-                res.status(400).json({message: "Product with reference '" + docRef + "' not found !"});
+            try {
+                const product = await loadProduct(docRef);
+                if (!product)
+                    res.status(400).json({message: "Product with reference '" + docRef + "' not found !"});
 
-            res.json(transformResponse(product));
+                res.json(transformResponse(product));
+            } catch (e: any) {
+                res.status(400).json({message: e.message})
+            }
             break;
         case 'PATCH':
             const {error, value} = validateProductUpdate.validate(req.body);
             if (error)
                 res.status(422).json({error: 'Validation error', message: error.message});
 
-            const updated = updateProduct(docRef, value);
-            if(!updated)
-                res.status(400).json({ message: "Product with reference '" + docRef + "' not found !" });
+            try {
+                const updated = updateProduct(docRef, value);
+                if(!updated)
+                    res.status(400).json({ message: "Product with reference '" + docRef + "' not found !" });
 
-            res.json(transformResponse(updated));
+                res.json(transformResponse(updated));
+            }catch (e: any) {
+                res.status(400).json({message: e.message})
+            }
             break;
         case 'DELETE':
-            const success = await deleteProduct(docRef);
-            if(!success)
-                res.status(400).json({message: "Product with reference '" + docRef + "' not found !"});
+            try {
+                const success = await deleteProduct(docRef);
+                if(!success)
+                    res.status(400).json({message: "Product with reference '" + docRef + "' not found !"});
 
-            res.status(204);
+                res.status(204).json(docRef);
+            } catch (e: any) {
+                res.status(400).json({message: e.message})
+            }
             break;
         default:
             res.status(405).json({message: 'Method not allowed'})

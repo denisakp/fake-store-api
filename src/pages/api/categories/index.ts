@@ -7,9 +7,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     switch (req.method) {
         case 'GET':
-            const categories = await loadCategories();
-
-            res.json(transformResponse(categories))
+            try {
+                const categories = await loadCategories();
+                res.json(transformResponse(categories))
+            } catch (e: any) {
+                res.status(500).json({message: e.message})
+            }
             break;
         case 'POST':
             const {name} = req.body;

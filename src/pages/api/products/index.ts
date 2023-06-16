@@ -29,9 +29,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 direction: req.query?.sort ? Number(req.query.order) : DEFAULT_SORT_DIRECTION,
             }
 
-            const {products, total} = await loadProducts(parameter);
-
             try {
+                const {products, total} = await loadProducts(parameter);
+
                 res.status(200).json(PaginationResponse({
                     req,
                     page: parameter.page,
@@ -42,7 +42,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             } catch (err: any) {
                 res.status(500).json({ message: err.message})
             }
-
             break;
         case 'POST':
             const {error, value} = validateProductCreate.validate(req.body);

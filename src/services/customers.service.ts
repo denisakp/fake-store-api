@@ -5,6 +5,7 @@ import {CustomerInterface, CustomerQueryBuilderParameter} from "@/interfaces/cus
 import {OrderQueryBuilderParameter} from "@/interfaces/order.interface";
 import {DUMMY_CUSTOMER} from "@/helpers/constants";
 import maskProperty from "@/helpers/mask-property";
+import {WithId} from "mongodb";
 
 /**
  * Load customers resources
@@ -39,38 +40,14 @@ export async function loadCustomers(query: CustomerQueryBuilderParameter) {
  * @param docRef
  */
 export async function loadCustomer(docRef: string) {
-    const docRef_oi = new ObjectId(docRef);
-    const product_oi = new ObjectId('6485c35814c402ee08ec6294');
-
-    if(!docRef_oi || !docRef_oi.equals(product_oi))
-        return;
-
-    return maskProperty(DUMMY_CUSTOMER, ['password']);
-}
-
-/**
- * Load customer orders
- * @param docRef
- * @param query
- */
-export async function loadCustomerOrders(docRef: string, query: OrderQueryBuilderParameter) {
-    const db = await connectToDB();
     try {
         const docRef_oi = new ObjectId(docRef);
-        const customer_oi = new ObjectId('6485c35814c402ee08ec6294');
-        if (!docRef_oi || !docRef_oi.equals(customer_oi))
+        if(!docRef_oi || !docRef_oi.equals('6485c35814c402ee08ec6294'))
             return;
 
-        const {options, sort, skip} = orderQueryBuilder(query);
-
-        const total: number = await db.collection("orders").countDocuments({...options, customer: customer_oi });
-
-        const orders = await db.collection("orders").find({...options, customer: customer_oi }).limit(query.limit).skip(skip).sort(sort).toArray()
-
-        return {orders, total};
-
+        return maskProperty(DUMMY_CUSTOMER, ['password']);
     } catch (e) {
-        throw new Error('Failed to load orders for customer with docRef: ' + docRef);
+        throw new Error("Argument '" + docRef + "' passed in must be a string of 12 bytes or a string of 24 hex characters or an integer");
     }
 }
 
@@ -91,14 +68,62 @@ export async function createCustomer(data: CustomerInterface) {
  * @param data
  */
 export function updateCustomer(docRef: string, data: CustomerInterface) {
-    const docRef_oi = new ObjectId(docRef);
-    const product_oi = new ObjectId('6485c35814c402ee08ec6294');
+    try {
+        const docRef_oi = new ObjectId(docRef);
+        if(!docRef_oi || !docRef_oi.equals('6485c35814c402ee08ec6294'))
+            return;
 
-    if(!docRef_oi || !docRef_oi.equals(product_oi))
-        return;
+        const customer = maskProperty(DUMMY_CUSTOMER, ['password']);
+        const _data = maskProperty(data, ['password'] );
 
-    const customer = maskProperty(DUMMY_CUSTOMER, ['password']);
-    const _data = maskProperty(data, ['password'] );
+        return { ...customer, ..._data}
+    }catch (e) {
+        throw new Error("Argument '" + docRef + "' passed in must be a string of 12 bytes or a string of 24 hex characters or an integer");
+    }
+}
 
-    return { ...customer, ..._data}
+
+export async function customerOrders (docRef: string, query: OrderQueryBuilderParameter) {
+    const db = await connectToDB();
+    try {
+        const docRef_oi = new ObjectId(docRef);
+        const customer_oi = new ObjectId('6485c35814c402ee08ec6294');
+        if (!docRef_oi || !docRef_oi.equals(customer_oi))
+            return;
+
+        const {options, sort, skip} = orderQueryBuilder(query);
+
+        return  await db
+            .collection("orders")
+            .find({...options, customer: customer_oi })
+            .limit(query.limit)
+            .skip(skip)
+            .sort(sort)
+            .toArray()
+
+    } catch (e) {
+        throw new Error('Failed to load orders for customer with docRef: ' + docRef);
+    }
+}
+
+/**
+ *
+ * @param docRef
+ * @param query
+ */
+export async function customerOrdersCounter(docRef: string, query: OrderQueryBuilderParameter) {
+    const db = await connectToDB();
+    try {
+        const docRef_oi = new ObjectId(docRef);
+        const customer_oi = new ObjectId('6485c35814c402ee08ec6294');
+        if (!docRef_oi || !docRef_oi.equals(customer_oi))
+            return;
+
+        const {options, sort, skip} = orderQueryBuilder(query);
+
+        return await db.collection("orders").countDocuments({...options, customer: customer_oi });
+
+    } catch (e) {
+        throw new Error('Failed to count orders for customer with docRef: ' + docRef);
+    }
 }
