@@ -2,7 +2,7 @@ import {NextApiRequest, NextApiResponse} from "next";
 import transformResponse from "@/helpers/transform-response";
 import {validateOrderCreate, validateOrderLoading} from "@/validations/order.validation";
 import {createOrder, loadOrders} from "@/services/orders.service";
-import {DEFAULT_PAGINATION_LIMIT, DEFAULT_PAGINATION_PAGE, DEFAULT_SORT_DIRECTION,} from "@/helpers/constants";
+import {DEFAULT_PAGINATION_LIMIT, DEFAULT_PAGINATION_PAGE} from "@/helpers/constants";
 import PaginationResponse from "@/helpers/pagination-response";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {

@@ -5,7 +5,6 @@ import {CustomerInterface, CustomerQueryBuilderParameter} from "@/interfaces/cus
 import {OrderQueryBuilderParameter} from "@/interfaces/order.interface";
 import {DUMMY_CUSTOMER} from "@/helpers/constants";
 import maskProperty from "@/helpers/mask-property";
-import {WithId} from "mongodb";
 
 /**
  * Load customers resources
@@ -91,14 +90,13 @@ export async function customerOrders (docRef: string, query: OrderQueryBuilderPa
         if (!docRef_oi || !docRef_oi.equals(customer_oi))
             return;
 
-        const {options, sort, skip} = orderQueryBuilder(query);
+        const {options, skip} = orderQueryBuilder(query);
 
         return  await db
             .collection("orders")
             .find({...options, customer: customer_oi })
             .limit(query.limit)
             .skip(skip)
-            .sort(sort)
             .toArray()
 
     } catch (e) {
@@ -119,7 +117,7 @@ export async function customerOrdersCounter(docRef: string, query: OrderQueryBui
         if (!docRef_oi || !docRef_oi.equals(customer_oi))
             return;
 
-        const {options, sort, skip} = orderQueryBuilder(query);
+        const {options} = orderQueryBuilder(query);
 
         return await db.collection("orders").countDocuments({...options, customer: customer_oi });
 

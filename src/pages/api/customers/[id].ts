@@ -1,5 +1,5 @@
 import {NextApiRequest, NextApiResponse} from "next";
-import {customerOrders, customerOrdersCounter, loadCustomer, updateCustomer} from "@/services/customers.service";
+import {loadCustomer, updateCustomer} from "@/services/customers.service";
 import transformResponse from "@/helpers/transform-response";
 import {validateUploadCustomer} from "@/validations/customer.validation";
 

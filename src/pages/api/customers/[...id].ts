@@ -1,6 +1,6 @@
 import {NextApiRequest, NextApiResponse} from "next";
 import {validateOrderLoading} from "@/validations/order.validation";
-import {DEFAULT_PAGINATION_LIMIT, DEFAULT_PAGINATION_PAGE, DEFAULT_SORT_DIRECTION, SITE_URL} from "@/helpers/constants";
+import {DEFAULT_PAGINATION_LIMIT, DEFAULT_PAGINATION_PAGE, SITE_URL} from "@/helpers/constants";
 import {customerOrders, customerOrdersCounter} from "@/services/customers.service";
 import PaginationResponse from "@/helpers/pagination-response";
 import maskProperty from "@/helpers/mask-property";
