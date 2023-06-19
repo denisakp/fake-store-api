@@ -9,13 +9,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     switch (req.method) {
         case 'GET':
             try {
-                const customer = await loadCustomer(docRef);
+                const customer = loadCustomer(docRef);
                 if (!customer)
                     res.status(400).json({message: "Customer with reference '" + docRef + "' not found !"});
 
                 res.json(transformResponse(customer));
             } catch (e: any) {
-                res.status(400).json({message: e.message})
+                res.status(422).json({error: 'Validation error', message: e.message})
             }
             break;
         case 'PATCH':
@@ -30,7 +30,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
                 res.json(transformResponse(updated));
             }catch (e: any) {
-                res.status(400).json({message: e.message})
+                res.status(422).json({error: 'Validation error', message: e.message})
             }
             break;
         default:

@@ -4,7 +4,7 @@ import {updatePasswordValidation} from "@/validations/auth.validation";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     switch (req.method) {
-        case 'POST':
+        case 'PATCH':
             const {error, value} = updatePasswordValidation.validate(req.body);
             if (error)
                 res.status(422).json({error: 'Validation Error', message: error});

@@ -23,12 +23,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 res.status(422).json({error: 'Validation error', message: error.message});
 
             try {
-                const updated = await updateOrder(docRef, value);
+                const updated =  updateOrder(docRef, value);
                 if(!updated)
                     res.status(400).json({ message: "Order with reference '" + docRef + "' not found !" });
                 res.json(transformResponse(updated));
             } catch (e: any) {
-                res.status(400).json({message: e.message})
+                res.status(422).json({error: 'Validation error', message: e.message})
             }
             break;
         case 'DELETE':
@@ -39,7 +39,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
                 res.status(204).json(docRef)
             } catch (e: any) {
-                res.status(400).json({message: e.message})
+                res.status(422).json({error: 'Validation error', message: e.message})
             }
 
             break;

@@ -15,7 +15,7 @@ export default async function handler (req: NextApiRequest, res: NextApiResponse
 
                 res.json(transformResponse(category));
             } catch (e:any) {
-                res.status(500).json({message: e.message})
+                res.status(422).json({error: "Validation Error", message: e.message})
             }
             break;
         case 'PATCH':
@@ -32,7 +32,7 @@ export default async function handler (req: NextApiRequest, res: NextApiResponse
 
                 res.json(transformResponse(updated));
             }catch (e: any) {
-                res.status(400).json({message: e.message})
+                res.status(422).json({message: e.message})
             }
             break;
         default:

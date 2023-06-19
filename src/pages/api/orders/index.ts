@@ -45,9 +45,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             try {
                 const order = createOrder(value);
 
-                res.status(200).json(transformResponse(order));
+                res.status(201).json(transformResponse(order));
             } catch (e: any) {
-                res.status(500).json({message: e.message})
+                res.status(422).json({error: 'Validation error', message: e.message})
             }
             break;
         default:

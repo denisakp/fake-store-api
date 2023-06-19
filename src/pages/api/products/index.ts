@@ -48,9 +48,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             if (error)
                 res.status(422).json({error: 'Validation error', message: error.message})
 
-            const product = await createProduct(value);
+            const product = createProduct(value);
 
-            res.json(transformResponse(product))
+            res.status(201).json(transformResponse(product))
             break;
         default:
             return res.status(405).json({message: 'Method not allowed'})

@@ -32,18 +32,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 const orders = await customerOrders(docRef, parameter);
                 const total = await customerOrdersCounter(docRef, parameter);
 
-                const response = PaginationResponse({
-                    req,
-                    page: parameter.page,
-                    limit: parameter.limit,
-                    count: total as number,
-                    data: orders
-                })
                 res
                     .status(200)
                     .json({
                         customer: SITE_URL + '/customers/' + docRef,
-                        ...response
+                        orders: PaginationResponse({
+                            req,
+                            page: parameter.page,
+                            limit: parameter.limit,
+                            count: total as number,
+                            data: orders
+                        })
                     });
 
             } catch (e: any) {

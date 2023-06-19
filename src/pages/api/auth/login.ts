@@ -7,7 +7,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         case 'POST':
             const {error, value} = loginValidation.validate(req.body);
             if (error)
-                res.status(422).json({error: 'Validation Error', message: error});
+                res.status(422).json({error: 'Validation Error', message: error.message});
 
             const authenticated = login(value.email, value.password);
             if (!authenticated)

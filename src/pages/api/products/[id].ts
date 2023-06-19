@@ -15,7 +15,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
                 res.json(transformResponse(product));
             } catch (e: any) {
-                res.status(400).json({message: e.message})
+                res.status(422).json({message: e.message})
             }
             break;
         case 'PATCH':
@@ -25,23 +25,23 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
             try {
                 const updated = updateProduct(docRef, value);
-                if(!updated)
-                    res.status(400).json({ message: "Product with reference '" + docRef + "' not found !" });
+                if (!updated)
+                    res.status(400).json({message: "Product with reference '" + docRef + "' not found !"});
 
                 res.json(transformResponse(updated));
-            }catch (e: any) {
-                res.status(400).json({message: e.message})
+            } catch (e: any) {
+                res.status(400).json({error: "Validation error", message: e.message})
             }
             break;
         case 'DELETE':
             try {
                 const success = await deleteProduct(docRef);
-                if(!success)
+                if (!success)
                     res.status(400).json({message: "Product with reference '" + docRef + "' not found !"});
 
                 res.status(204).json(docRef);
             } catch (e: any) {
-                res.status(400).json({message: e.message})
+                res.status(422).json({error: "Validation error", message: e.message})
             }
             break;
         default:
