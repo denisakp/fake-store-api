@@ -32,22 +32,20 @@ export const DUMMY_CUSTOMER = {
     "address": {
         "delivery": [
             {
-                "city": "London",
-                "street": "Abbey Road",
-                "number": "365",
-                "zipCode": "Dublin, D13",
-                "country": "United Kindom",
-                "phone": "01632960297"
+                "city": "Georgia (GA)",
+                "street": "7302 Wood Way Holw, Stone Mountain",
+                "zip_code": "30087",
+                "country": "USA",
+                "phone": "(770) 469-1531"
             }
         ],
         "billing": [
             {
-                "city": "London",
-                "street": "Abbey Road",
-                "number": "365",
-                "zipCode": "Dublin, D13",
-                "country": "United Kindom",
-                "phone": "01632960297"
+                "city": "Georgia (GA)",
+                "street": "7302 Wood Way Holw, Stone Mountain",
+                "zip_code": "30087",
+                "country": "USA",
+                "phone": "(770) 469-1531"
             }
         ]
     },

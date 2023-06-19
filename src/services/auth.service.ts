@@ -2,6 +2,7 @@ import {DEFAULT_EMAIL, DEFAULT_JWT_SECRET, DEFAULT_PASSWORD, DUMMY_CUSTOMER} fro
 import jwt from "jsonwebtoken";
 import {CustomerInterface} from "@/interfaces/customer.interface";
 import maskProperty from "@/helpers/mask-property";
+import {ObjectId} from "bson";
 
 /**
  * Authenticate a given customer
@@ -31,7 +32,7 @@ export function register(data: CustomerInterface) {
     const customer = maskProperty(DUMMY_CUSTOMER, ['password', 'address']);
     const _data = maskProperty(data, ['password'] );
 
-    return {...customer, ..._data}
+    return {...customer, ..._data, _id: new ObjectId()}
 }
 
 export function generateToken() {
