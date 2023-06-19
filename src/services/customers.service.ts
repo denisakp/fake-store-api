@@ -38,7 +38,7 @@ export async function loadCustomers(query: CustomerQueryBuilderParameter) {
  * Load customer resource by it docRed
  * @param docRef
  */
-export async function loadCustomer(docRef: string) {
+export function loadCustomer(docRef: string) {
     try {
         const docRef_oi = new ObjectId(docRef);
         if(!docRef_oi || !docRef_oi.equals('6485c35814c402ee08ec6294'))

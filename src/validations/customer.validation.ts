@@ -19,7 +19,6 @@ const addressValidation = Joi.object({
     zip_code: Joi.string().optional(),
     country: Joi.string().optional(),
     phone: Joi.string().optional(),
-    number: Joi.number().optional(),
 })
 
 export const validateUploadCustomer = Joi.object({
