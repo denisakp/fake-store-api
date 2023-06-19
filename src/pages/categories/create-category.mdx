@@ -1,0 +1,47 @@
+# Create a category
+
+This method allows a user to register a new product category in the database. If the operation is successful,
+the API responds with a response containing a status code of 201. In case of validation errors,
+such as missing required properties of the category object, the API returns a 422 status code.
+
+```js copy showLineNumbers filename="categories/create-category.js"
+const axios = require('axios');
+let data = JSON.stringify({
+  "name": "Bazoka"
+});
+
+let config = {
+  method: 'post',
+  url: 'https://fakestoreapi.denisakp.me/api/categories/',
+  headers: {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json'
+  },
+  data
+};
+
+axios.request(config)
+.then((response) => {
+  console.log(JSON.stringify(response.data));
+})
+.catch((error) => {
+  console.log(error);
+});
+
+
+```
+
+> By sending an object similar to the code provided, you will receive an object with a new ID. However,
+please be aware that no real data will be inserted into the database. Therefore, attempting to access the new ID will result in a 404 error.
+
+
+Here's an example of the API's response when everything goes smoothly.
+
+```json copy filename="API Response"
+{
+    "id": "64905e5ccf953657b84336e0",
+    "name": "Bazoka"
+}
+```
+
+For more interaction, please check the [Postman Collection](https://postman.com)
