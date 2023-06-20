@@ -46,7 +46,7 @@ export function productQueryBuilder(query: ProductQueryBuilderParameter): Produc
 }
 
 /**
- * This function build query used to load orders
+ * This function builds a query used to load orders
  * @param query
  */
 export function orderQueryBuilder(query: OrderQueryBuilderParameter): OrderQueryBuilderResponse {
@@ -77,7 +77,7 @@ export function orderQueryBuilder(query: OrderQueryBuilderParameter): OrderQuery
 }
 
 /**
- * This function build queries to load customers
+ * This function builds a query to load customers
  * @param query
  */
 export function customerQueryBuilder(query: CustomerQueryBuilderParameter): CustomerQueryBuilderResponse {

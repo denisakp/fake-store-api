@@ -1,0 +1,274 @@
+import {Callout} from "nextra/components";
+
+
+# Fetch all products
+
+## Overview
+The "allProduct" method allows a user to retrieve the list of products. If the operation is successful,
+the API responds with a response containing a status code of 200 and a response body with the list of products. In case of an error,
+the API returns a status code of 500.
+
+```js copy showLineNumbers filename="products/fetch-product.js"
+const axios = require('axios');
+
+let config = {
+  method: 'get',
+  url: 'https://fakestoreapi.denisakp.me/api/products/',
+  headers: {
+    'Accept': 'application/json'
+  }
+};
+
+axios.request(config)
+.then((response) => {
+  console.log(JSON.stringify(response.data));
+})
+.catch((error) => {
+  console.log(error);
+});
+
+```
+
+Here's an example of the API's response when everything goes smoothly.
+
+```json copy filename="API Response"
+{
+    "data": [
+        {
+            "id": "64858a3114c402ee08ec6293",
+            "name": "iPhone X",
+            "description": "The iPhone X is a smartphone designed, developed and marketed by Apple Inc. It is part of the eleventh generation of the iPhone",
+            "stock": 13,
+            "price": 450.99,
+            "images": [
+                "https://fakestoreapi.denisakp.me/static/products/1/1.jpg",
+                "https://fakestoreapi.denisakp.me/static/products/1/1.jpg",
+                "https://fakestoreapi.denisakp.me/static/products/1/1.jpg",
+                "https://fakestoreapi.denisakp.me/static/products/1/1.jpg"
+            ],
+            "categories": [
+                "smartphone",
+                "iphone"
+            ],
+            "sku": "2023060001"
+        }
+    ],
+    "total": 1,
+    "perPage": 15,
+    "currentPage": 1,
+    "hasNextPage": false,
+    "previousPage": null,
+    "nextPage": null
+}
+```
+> As you can see, this response is specific as it implements a pagination system that we will discuss in the next section.
+
+## Pagination
+
+Pagination is a technique used to divide a large dataset into smaller, more manageable chunks called pages. It enables efficient retrieval and presentation of data by fetching only a subset of records at a time.
+
+In our system, we have implemented pagination using the offset pagination approach. This method utilizes two query parameters: **limit** and **page**.
+
+- The **limit** parameter represents the number of items to be returned per page. Its default value is 15 if the user does not provide a value.
+
+- The **page** parameter indicates the current page of the paginated data. It's used to retrieve a specific page results
+
+The response model for pagination consists of the following components:
+
+- "total": It represents the total number of elements present in the database.
+
+- "perPage": It indicates the number of items to be returned per page.
+
+- "currentPage": It denotes the current page being viewed.
+
+- "hasNextPage": This boolean value indicates whether a next page exists.
+
+- "previousPage": It provides the link to the previous page if the current page is greater than 1. Otherwise, it returns null.
+
+- "nextPage": It offers the link to the next page if "hasNextPage" is set to true. Otherwise, it returns null.
+
+By utilizing these pagination features, developers can efficiently navigate and retrieve data in a structured and controlled manner.
+
+### Let's try
+
+In the following example, we'll limit the results to 2 and will start from the first page
+
+```js copy showLineNumbers filename="pagination"
+const axios = require('axios');
+
+let config = {
+  method: 'get',
+  url: 'https://fakestoreapi.denisakp.dev/api/products/?limit=3&page=1',
+  headers: {
+    'Accept': 'application/json'
+  }
+};
+
+axios.request(config)
+.then((response) => {
+  console.log(JSON.stringify(response.data));
+})
+.catch((error) => {
+  console.log(error);
+});
+
+```
+
+Here's an example of the API's response when everything goes smoothly.
+
+```json
+{
+    "data": [
+        {
+            "id": "64858a3114c402ee08ec6293",
+            "name": "iPhone X",
+            "description": "The iPhone X is a smartphone designed, developed and marketed by Apple Inc. It is part of the eleventh generation of the iPhone",
+            "stock": 13,
+            "price": 450.99,
+            "images": [
+                "https://fakestoreapi.denisakp.me/static/products/1/1.jpg",
+                "https://fakestoreapi.denisakp.me/static/products/1/1.jpg",
+                "https://fakestoreapi.denisakp.me/static/products/1/1.jpg",
+                "https://fakestoreapi.denisakp.me/static/products/1/1.jpg"
+            ],
+            "categories": [
+                "smartphone",
+                "iphone"
+            ],
+            "sku": "2023060001"
+        },
+        {
+            "id": "648b78130097e4d79d964cff",
+            "name": "iPhone 12",
+            "description": "The iPhone 12 is a smartphone designed, developed and marketed by Apple Inc. It is part of the eleventh generation of the iPhone",
+            "stock": 2,
+            "price": 2100.99,
+            "images": [
+                "https://fakestoreapi.denisakp.me/static/products/1/1.jpg",
+                "https://fakestoreapi.denisakp.me/static/products/1/1.jpg",
+                "https://fakestoreapi.denisakp.me/static/products/1/1.jpg",
+                "https://fakestoreapi.denisakp.me/static/products/1/1.jpg"
+            ],
+            "categories": [
+                "smartphone",
+                "iphone"
+            ],
+            "sku": "2023060004"
+        }
+    ],
+    "total": 6,
+    "perPage": 2,
+    "currentPage": 1,
+    "hasNextPage": true,
+    "previousPage": null,
+    "nextPage": "http://localhost:3000/api/products/?page=2&limit=2"
+}
+```
+
+###  Validation
+
+Naturally, we have implemented validation for the limit and page parameters. As mentioned earlier,
+they refer to numerical values. Therefore, the API expects you to provide numerical values; otherwise, it will return a 422 error.
+
+Here's an example of the API's response when you set "limit" or "page" with non-numerical value
+
+```json copy
+{
+    "error": "Validation error",
+    "message": "limit must be a number"
+}
+```
+
+## Querying
+
+The API also provides the ability to search for a resource using a keyword. Currently,
+this feature is limited to the Product resource. Users can search for products based on a keyword. The keyword must contain at least 3 characters; otherwise,
+the API returns a validation error. Additionally, we have allowed the keyword search to be combined with pagination to enable
+smoother and structured navigation of the search results.
+
+Here's an example of combining querying with limitation
+
+```js copy showLineNumbers filename="querying"
+const axios = require('axios');
+
+let config = {
+  method: 'get',
+  url: 'http://localhost:3000/api/products/?limit=3&page=1&q=iphone',
+  headers: {
+    'Accept': 'application/json'
+  }
+};
+
+axios.request(config)
+.then((response) => {
+  console.log(JSON.stringify(response.data));
+})
+.catch((error) => {
+  console.log(error);
+});
+
+```
+
+<Callout>
+    The query parameter "q" which represent the keyword is also validated beforehand.
+    If you provide a value with length  less than  3, API will return an error message with code 422
+</Callout>
+
+
+## Filtering and Sorting
+
+The API also offers the ability to apply sorting to the resources based on your preference. It allows you to apply filters
+to arrange the resources accordingly. Sorting can be combined with querying and pagination for a more comprehensive data retrieval experience.
+
+### Filtering
+
+To apply filtering on products, two parameters are used:
+
+- "minPrice": Represents the lower-bound value. By default, it is not defined. However, when provided,
+it expects a numerical value. If not respected, the API returns a validation error with a status code of 422.
+
+- "maxPrice": Represents the upper-bound value. It is required when the "minPrice" parameter is provided. The value of "maxPrice"
+must be strictly greater than "minPrice". If not respected, the API returns a validation error with a status code of 422.
+
+
+### Sorting
+
+To apply sorting to a product, two parameters are used:
+
+- "sort": Represents the field on which you want to apply the sorting. By default, sorting is applied to the "name" property. Only predefined values such as "name," "price," and "sku" can be entered.
+
+- "direction": Represents the sorting direction you want to apply. It is mandatory to provide a value for "direction" (numeric values only: -1 or 1) when a value is provided for "sort". By default, sorting is applied in ascending order.
+
+
+In summary, it is important to note that "minPrice" and "maxPrice" are used when applying a filter to retrieve products within a price range. For example,
+products with prices ranging from 400 to 500 USD.
+
+Here's an example of how to apply filters and sorting
+
+```js copy showLineNumbers filename="filtering & sorting"
+const axios = require('axios');
+
+let config = {
+  method: 'get',
+  url: 'http://localhost:3000/api/products/?limit=3&page=1&q=iphone&minPrice=400&maxPrice=500&sort=price&direction=-1',
+  headers: {
+    'Accept': 'application/json'
+  }
+};
+
+axios.request(config)
+.then((response) => {
+  console.log(JSON.stringify(response.data));
+})
+.catch((error) => {
+  console.log(error);
+});
+
+```
+
+In the example above, we requested a list of products with prices ranging from 400 to 500 and whose name includes the
+keyword "iphone". We then limited the number of items per page to 3 and applied a sorting order based on price. This means that the API
+will return a result sorted by price in ascending order.
+
+For more interaction, please check the [Postman Collection](https://postman.com)
+

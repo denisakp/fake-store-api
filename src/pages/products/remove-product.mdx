@@ -1,0 +1,27 @@
+# Delete a product
+
+This method allows a user to remove a product from the database based on its ID. If the request is successful,
+the API responds with a status code of 204. In case of validation errors, such as an invalid ObjectId,
+the API returns a 422 status code. Additionally, if the provided ID does not correspond to any product in the database,
+the API returns a 400 status code.
+
+```js copy showLineNumbers filename="products/delete-product.js"
+const axios = require('axios');
+
+let config = {
+  method: 'delete',
+  url: 'http://localhost:3000/api/products/64858a3114c402ee08ec6293',
+  headers: { }
+};
+
+axios.request(config)
+.then((response) => {
+  console.log(JSON.stringify(response.data));
+})
+.catch((error) => {
+  console.log(error);
+});
+
+```
+
+For more interaction, please check the [Postman Collection](https://postman.com)
