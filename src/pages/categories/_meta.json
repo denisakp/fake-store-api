@@ -1,0 +1,6 @@
+{
+  "fetch-categories": "Load categories",
+  "create-category": "Create a category",
+  "fetch-category": "Load category",
+  "update-category": "Update category"
+}

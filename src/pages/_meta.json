@@ -1,15 +1,22 @@
 {
   "index": "Introduction",
-  "another": "Another Page",
-  "advanced": "Advanced (A Folder)",
+  "pagination": "Pagination",
+  "auth": "Authentication",
+  "categories": "Categories",
+  "products": "Products",
+  "orders": "Orders",
+  "customers": "Customers",
+
   "about": {
-    "title": "About",
+    "title": "About me",
+    "href": "https://denisakp.me",
+    "newWindow": true,
     "type": "page"
   },
-  "contact": {
-    "title": "Contact ↗",
-    "type": "page",
-    "href": "https://twitter.com/shuding_",
-    "newWindow": true
+  "discussions": {
+    "title": "Discussions ↗",
+    "href": "https://github.com/denisakp/fake-store-api/discussions",
+    "newWindow": true,
+    "type": "page"
   }
 }

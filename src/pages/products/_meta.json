@@ -1,0 +1,7 @@
+{
+  "create-product": "Create Product",
+  "fetch-products": "Load products",
+  "fetch-product": "Load product",
+  "update-product": "Update product",
+  "remove-product": "Delete product"
+}
