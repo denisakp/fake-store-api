@@ -65,8 +65,8 @@ const config: DocsThemeConfig = {
                 />
                 <meta name="og:image" content={socialCard} />
                 <meta name="apple-mobile-web-app-title" content="Fake Store API" />
-                <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-                <link rel="icon" href="/favicon.png" type="image/png" />
+                <link rel="icon" href="/logo.png" type="image/svg+xml" />
+                <link rel="icon" href="/logo.png" type="image/png" />
             </>
         )
     },
