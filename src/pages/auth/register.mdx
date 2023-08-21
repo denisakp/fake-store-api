@@ -1,0 +1,54 @@
+import {Callout} from "nextra/components";
+
+
+# Registration
+
+This method in the Fake Store API allows users to create an account by providing their name, email and password.
+The API performs form validation and returns an HTTP status code of 201 if the registration is successful, 400 for error scenarios, and 422 for validation errors.
+
+For the HTTP 400 error code, it occurs when, for example, the email provided during registration is already in use.
+
+```js copy showLineNumbers filename="auth/register.js"
+const axios = require('axios');
+let data = JSON.stringify({
+  "email": "omolade@fakemail.io",
+  "password": "fakeP@ssw1rd!",
+  "name": "Omolade ADETI"
+});
+
+let config = {
+  method: 'post',
+  url: 'http://localhost:3000/api/auth/register',
+  headers: {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json'
+  },
+  data : data
+};
+
+axios.request(config)
+.then((response) => {
+  console.log(JSON.stringify(response.data));
+})
+.catch((error) => {
+  console.log(error);
+});
+
+```
+
+<Callout>
+    When you send an object as shown in the code above, it will respond with a customer object containing a new ID.
+    Keep in mind that any real-world data won't be inserted into the database. Therefore, attempting to access the new ID will result in a 404 error.
+</Callout>
+
+
+Here's then a sample response from the API when everything goes smoothly.
+``` json copy filename="API Response"
+{
+    "id": "64905dc7cf953657b84336df",
+    "name": "Omolade ADETI",
+    "email": "omolade@fakemail.io"
+}
+```
+
+For more interaction, please check the [Postman Collection](https://www.postman.com/red-eclipse-403574/workspace/denis-akp/request/6548572-eff8a2a4-9b70-4a22-9157-10c2f28611a0?active-environment=dff61d40-d363-4cfb-8229-c4ff7e630154)

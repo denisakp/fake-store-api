@@ -1,0 +1,44 @@
+# Login: Authenticate your users
+
+
+The login method allows you to authenticate users using an email address and password.
+To create a more realistic API, we have included form data validation and error handling.
+
+
+For instance, if a user provides an invalid email address, they will receive a validation error message with an HTTP 400 status code,
+along with a descriptive error message. Similarly, if they provide an incorrect email/password combination, they will also receive an HTTP 400 status code with an error message. However, if the combination is correct, a token will be generated and included in the response.
+
+```js copy showLineNumbers filename="auth/login.js"
+const axios = require('axios');
+let data = JSON.stringify({
+  "email": "john.doe@site.com",
+  "password": "Fake:strore@password"
+});
+
+let config = {
+  method: 'post',
+  url: 'http://localhost:3000/api/auth/login',
+  headers: {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json'
+  },
+  data : data
+};
+
+axios.request(config)
+.then((response) => {
+  console.log(JSON.stringify(response.data));
+})
+.catch((error) => {
+  console.log(error);
+});
+
+```
+
+Here's an example of the API's response when everything goes smoothly.
+``` json copy filename="response body"
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDg1YzM1ODE0YzQwMmVlMDhlYzYyOTQiLCJuYW1lIjoiSm9obiBEb2UiLCJpYXQiOjE2ODcxODI0OTEsImV4cCI6MTY4NzIyNTY5MSwiaXNzIjoiRkFLRSBTVE9SRSBBUEkifQ.h0vxrTRQUwjNS65TDGVqDxZYiNTMi65azAPDy9YrU-E"
+}
+```
+For more interaction, please check the [Postman Collection](https://www.postman.com/red-eclipse-403574/workspace/denis-akp/request/6548572-814d0467-3a2d-4668-a058-740e0f097882?active-environment=dff61d40-d363-4cfb-8229-c4ff7e630154)

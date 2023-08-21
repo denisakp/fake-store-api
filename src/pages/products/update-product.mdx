@@ -1,0 +1,70 @@
+import {Callout} from "nextra/components";
+
+# Update a Product
+
+This method allows modification of a product based on its ID. To update a product,
+you need to specify the fields you wish to modify along with their new values. If the request is successful,
+the API responds with a status code of 200, along with the updated object containing its new values. In case of validation errors,
+such as providing a non-existent property in the model, incorrect data type for a property,
+or an invalid ObjectId for the ID, the API returns a 422 status code. Additionally,
+if the provided ID does not correspond to any product in the database, the API returns a 400 status code.
+
+```js copy showLineNumbers filename="products/update-product.js"
+const axios = require('axios');
+let data = JSON.stringify({
+  "price": 1099.99,
+  "stock": 20,
+  "name": "Iphone X Max"
+});
+
+let config = {
+  method: 'patch',
+  maxBodyLength: Infinity,
+  url: 'http://localhost:3000/api/products/64858a3114c402ee08ec6293',
+  headers: {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json'
+  },
+  data : data
+};
+
+axios.request(config)
+.then((response) => {
+  console.log(JSON.stringify(response.data));
+})
+.catch((error) => {
+  console.log(error);
+});
+```
+
+<Callout>
+    Upon execution, you will receive an object with the sent ID containing updated values. However,
+    please note that no changes will be made to the actual database.
+</Callout>
+
+
+
+In the example above, we tried to update the product price and stock quantity. Now here is a sample API response
+
+```json copy filename="API Response"
+{
+    "id": "64858a3114c402ee08ec6293",
+    "name": "Iphone X Max",
+    "description": "The iPhone X is a smartphone designed, developed and marketed by Apple Inc. It is part of the eleventh generation of the iPhone",
+    "stock": 20,
+    "price": 1099.99,
+    "images": [
+        "https://fakestoreapi.denisakp.me/static/products/1/1.jpg",
+        "https://fakestoreapi.denisakp.me/static/products/1/1.jpg",
+        "https://fakestoreapi.denisakp.me/static/products/1/1.jpg",
+        "https://fakestoreapi.denisakp.me/static/products/1/1.jpg"
+    ],
+    "categories": [
+        "smartphone",
+        "iphone"
+    ],
+    "sku": "2023060001"
+}
+```
+
+For more interaction, please check the [Postman Collection](https://www.postman.com/red-eclipse-403574/workspace/denis-akp/request/6548572-3e0312a8-cc95-4ff5-bab3-a2f6f432fb89?active-environment=dff61d40-d363-4cfb-8229-c4ff7e630154)

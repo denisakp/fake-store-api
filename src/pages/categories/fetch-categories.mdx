@@ -1,0 +1,48 @@
+# Load all categories
+
+This method allows a user to retrieve the list of categories. If the operation is successful,
+the API responds with an array of Category models and an HTTP status code of 200. In case of an error,
+the API returns a status code of 500 and includes a "message" property describing the error message.
+
+
+```js copy showLineNumbers filename="categories/fetch-all.js"
+const axios = require('axios');
+
+let config = {
+  method: 'get',
+  url: 'http://localhost:3000/api/categories',
+  headers: {
+    'Accept': 'application/json'
+  }
+};
+
+axios.request(config)
+.then((response) => {
+  console.log(JSON.stringify(response.data));
+})
+.catch((error) => {
+  console.log(error);
+});
+
+```
+
+Here's an example of the API's response when everything goes smoothly.
+
+```json copy filename="API Response"
+[
+    {
+        "id": "6479065cb337e71eb79da693",
+        "name": "cars"
+    },
+    {
+        "id": "6481ef5753f096d90e39aa89",
+        "name": "smartphones"
+    },
+    {
+        "id": "6481ef7553f096d90e39aa8a",
+        "name": "laptops"
+    }
+]
+```
+
+For more interaction, please check the [Postman Collection](https://www.postman.com/red-eclipse-403574/workspace/denis-akp/request/6548572-48c321fb-f8bc-44ee-b02c-53538a3af93c?active-environment=dff61d40-d363-4cfb-8229-c4ff7e630154)

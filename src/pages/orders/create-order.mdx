@@ -1,0 +1,71 @@
+import {Callout} from "nextra/components";
+
+# Create an order
+
+This allows a user to place an order in the database.
+If the operation is successful, the API responds with a response containing a status code of 201.
+In case of validation errors, such as missing required properties of the product object,
+the API returns a 422 status code.
+
+```js copy showLineNumbers filename="orders/create-order.js"
+const axios = require('axios');
+let data = JSON.stringify({
+  "customer": "6485c35814c402ee08ec6294",
+  "products": [
+    {
+      "sku": "2023060001",
+      "name": "Iphone X",
+      "quantity": 3,
+      "price": 450.99
+    }
+  ]
+});
+
+let config = {
+  method: 'post',
+  url: 'http://localhost:3000/api/orders',
+  headers: {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json'
+  },
+  data : data
+};
+
+axios.request(config)
+.then((response) => {
+  console.log(JSON.stringify(response.data));
+})
+.catch((error) => {
+  console.log(error);
+});
+
+```
+
+<Callout>
+    By sending an object similar to the code provided, you will receive an object with a new ID. However,
+    please be aware that no real data will be inserted into the database. Therefore,
+    attempting to access the new ID will result in a 404 error.
+</Callout>
+
+Here's an example of the API's response when everything goes smoothly.
+
+```json copy filename="API Response"
+{
+    "id": "64e33280f089aba12c244a90",
+    "customer": "6485c35814c402ee08ec6294",
+    "products": [
+        {
+            "sku": "2023060001",
+            "name": "Iphone X",
+            "quantity": 3,
+            "price": 450.99
+        }
+    ],
+    "total_products": 1,
+    "total_quantity": 3,
+    "total_amount": 1352.97,
+    "created_datetime": "2023-08-21T09:46:40.704Z"
+}
+```
+
+For more interaction, please check the [Postman Collection](https://www.postman.com/red-eclipse-403574/workspace/denis-akp/request/6548572-1cd95df2-3e9e-429a-a0b7-0b3f3807ce5b?active-environment=dff61d40-d363-4cfb-8229-c4ff7e630154)

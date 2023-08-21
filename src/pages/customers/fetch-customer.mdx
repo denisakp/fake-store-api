@@ -1,0 +1,59 @@
+# Fetch a single Customer
+
+This method allows a manager to retrieve a customer based on his ID. The API responds with a response containing a status
+code of 200 if the product object exists. If the provided ID is not valid or does not correspond to an existing customer,
+the API returns a 400 status code. Additionally, if the manager submits an ID that is not a valid ObjectId,
+the API returns a 422 status code.
+
+```js copy showLineNumbers filename="customers/fetch-one.js"
+const axios = require('axios');
+
+let config = {
+  method: 'get',
+  url: 'http://localhost:3000/api/customers/6485c35814c402ee08ec6294',
+  headers: {
+    'Accept': 'application/json'
+  }
+};
+
+axios.request(config)
+.then((response) => {
+  console.log(JSON.stringify(response.data));
+})
+.catch((error) => {
+  console.log(error);
+});
+
+```
+
+Here's an example of the API's response when everything goes smoothly.
+
+```json copy filename="API Response"
+{
+    "id": "6485c35814c402ee08ec6294",
+    "name": "John Doe",
+    "email": "john.doe@site.com",
+    "address": {
+        "delivery": [
+            {
+                "city": "Georgia (GA)",
+                "street": "7302 Wood Way Holw, Stone Mountain",
+                "zip_code": "30087",
+                "country": "USA",
+                "phone": "(770) 469-1531"
+            }
+        ],
+        "billing": [
+            {
+                "city": "Georgia (GA)",
+                "street": "7302 Wood Way Holw, Stone Mountain",
+                "zip_code": "30087",
+                "country": "USA",
+                "phone": "(770) 469-1531"
+            }
+        ]
+    }
+}
+```
+
+For more interaction, please check the [Postman Collection](https://www.postman.com/red-eclipse-403574/workspace/denis-akp/request/6548572-9d9ccf83-b5f4-47c3-a752-9fe4d7fa786d?active-environment=dff61d40-d363-4cfb-8229-c4ff7e630154)

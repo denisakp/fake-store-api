@@ -1,0 +1,7 @@
+{
+  "create-order": "Create order",
+  "fetch-orders": "Load orders",
+  "fetch-order": "Load order",
+  "update-order": "Update order",
+  "remove-order": "Delete order"
+}

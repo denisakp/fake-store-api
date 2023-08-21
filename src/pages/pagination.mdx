@@ -1,0 +1,58 @@
+## Overview
+
+Pagination is a technique used to divide a large dataset into smaller, more manageable chunks called pages. It enables efficient retrieval and presentation of data by fetching only a subset of records at a time.
+
+In our system, we have implemented pagination using the offset pagination approach. This method utilizes two query parameters: **limit** and **page**.
+
+- The **limit** parameter represents the number of items to be returned per page. Its default value is 15 if the user does not provide a value.
+
+- The **page** parameter indicates the current page of the paginated data. It's used to retrieve a specific page results
+
+The response model for pagination consists of the following components:
+
+- __total__: It represents the total number of elements present in the database.
+
+- __perPage__: It indicates the number of items to be returned per page.
+
+- __currentPage__: It denotes the current page being viewed.
+
+- __hasNextPage__: This boolean value indicates whether a next page exists.
+
+- __previousPage__: It provides the link to the previous page if the current page is greater than 1. Otherwise, it returns null.
+
+- __nextPage__: It offers the link to the next page if "hasNextPage" is set to true. Otherwise, it returns null.
+
+By using these pagination features, developers can efficiently navigate and retrieve data in a structured and controlled manner.
+
+###  Validation
+
+Naturally, we have implemented validation for the limit and page parameters. As mentioned earlier,
+they refer to numerical values. Therefore, the API expects you to provide numerical values; otherwise, it will return a 422 error.
+
+Here's an example of the API's response when you set "limit" or "page" with non-numerical value
+
+```json copy
+{
+    "error": "Validation error",
+    "message": "limit must be a number"
+}
+```
+
+## Querying
+
+The API also provides the ability to search for a resource using a keyword. Currently,
+this feature is limited to the Product resource. Users can search for products based on a keyword. The keyword must contain at least 3 characters; otherwise,
+the API returns a validation error. Additionally, we have allowed the keyword search to be combined with pagination to enable
+smoother and structured navigation of the search results.
+
+
+## Filtering and Sorting
+
+The API also offers the ability to apply sorting to the resources based on your preference. It allows you to apply filters
+to arrange the resources accordingly. Sorting can be combined with querying and pagination for a more comprehensive data retrieval experience.
+
+Two parameters are used for sorting an API response. These are:
+
+- "sort": Represents the field on which you want to apply the sorting. By default, sorting is applied to the "name" property. Only predefined values such as "name," "price," and "sku" can be entered.
+
+- "direction": Represents the sorting direction you want to apply. It is mandatory to provide a value for "direction" (numeric values only: -1 or 1) when a value is provided for "sort". By default, sorting is applied in ascending order.

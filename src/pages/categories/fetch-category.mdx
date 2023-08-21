@@ -1,0 +1,38 @@
+# Fetch a single category
+
+This method allows a user to retrieve a category based on its ID. The API responds with a response containing a status
+code of 200 if the category object exists. If the provided ID is not valid or does not correspond to an existing category,
+the API returns a 400 status code. Additionally, if the user submits an ID that is not a valid ObjectId,
+the API returns a 422 status code.
+
+```js copy showLineNumbers filename="categories/fetch-one.js"
+const axios = require('axios');
+
+let config = {
+  method: 'get',
+  url: 'http://localhost:3000/api/categories/6479065cb337e71eb79da693',
+  headers: {
+    'Accept': 'application/json'
+  }
+};
+
+axios.request(config)
+.then((response) => {
+  console.log(JSON.stringify(response.data));
+})
+.catch((error) => {
+  console.log(error);
+});
+
+```
+
+Here's an example of the API's response when everything goes smoothly.
+
+```json copy filename="API Response"
+{
+    "id": "6479065cb337e71eb79da693",
+    "name": "smartphones"
+}
+```
+
+For more interaction, please check the [Postman Collection](https://www.postman.com/red-eclipse-403574/workspace/denis-akp/request/6548572-9e574683-09e9-4408-8d64-66662af23f02?active-environment=dff61d40-d363-4cfb-8229-c4ff7e630154)

@@ -1,0 +1,82 @@
+import {Callout} from "nextra/components";
+
+# Create a Product
+
+This allows a user to save a new product in the database.
+If the operation is successful, the API responds with a response containing a status code of 201.
+In case of validation errors, such as missing required properties of the product object,
+the API returns a 422 status code.
+
+```js copy showLineNumbers filename="products/create-product.js"
+const axios = require('axios');
+let data = JSON.stringify({
+  "name": "Fish",
+  "price": 2800,
+  "description": "Product description here",
+  "stock": 8,
+  "images": [
+    "http://placeimg.com/640/480/food",
+    "http://placeimg.com/640/480",
+    "http://placeimg.com/640/480",
+    "http://placeimg.com/640/480"
+  ],
+  "categories": [
+    "iphone",
+    "smartphone"
+  ],
+  "sku": "2023060001"
+});
+
+let config = {
+  method: 'post',
+  url: 'http://localhost:3000/api/products/',
+  headers: {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json'
+  },
+  data
+};
+
+axios.request(config)
+.then((response) => {
+  console.log(JSON.stringify(response.data));
+})
+.catch((error) => {
+  console.log(error);
+});
+
+```
+
+
+<Callout>
+    By sending an object similar to the code provided, you will receive an object with a new ID. However,
+    please be aware that no real data will be inserted into the database. Therefore,
+    attempting to access the new ID will result in a 404 error.
+</Callout>
+
+Here's an example of the API's response when everything goes smoothly.
+
+```json copy filename="API Response"
+{
+    "id": "64905fc1cf953657b84336e1",
+    "name": "Chicken",
+    "price": 2800,
+    "description": "Product description here",
+    "stock": 8,
+    "images": [
+        "http://placeimg.com/640/480/food",
+        "http://placeimg.com/640/480",
+        "http://placeimg.com/640/480",
+        "http://placeimg.com/640/480"
+    ],
+    "categories": [
+        "iphone",
+        "smartphone"
+    ],
+    "sku": "2023060001"
+}
+```
+
+> We have implemented a pagination system that returns paginated data with default configurations if none are provided. The following sections will cover pagination.
+
+For more interaction, please check the [Postman Collection](https://www.postman.com/red-eclipse-403574/workspace/denis-akp/request/6548572-bcb1823c-8869-40cc-9768-8d425d8412bc?active-environment=dff61d40-d363-4cfb-8229-c4ff7e630154)

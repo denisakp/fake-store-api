@@ -1,0 +1,52 @@
+# Fetch a single Product
+
+This method allows a user to retrieve a product based on its ID. The API responds with a response containing a status
+code of 200 if the product object exists. If the provided ID is not valid or does not correspond to an existing product,
+the API returns a 400 status code. Additionally, if the user submits an ID that is not a valid ObjectId,
+the API returns a 422 status code.
+
+```js copy showLineNumbers filename="products/fetch-one.js"
+const axios = require('axios');
+
+let config = {
+  method: 'get',
+  url: 'http://localhost:3000/api/products/64858a3114c402ee08ec6293',
+  headers: {
+    'Accept': 'application/json'
+  }
+};
+
+axios.request(config)
+.then((response) => {
+  console.log(JSON.stringify(response.data));
+})
+.catch((error) => {
+  console.log(error);
+});
+
+```
+
+Here's an example of the API's response when everything goes smoothly.
+
+```json copy filename="API Response"
+{
+    "id": "64858a3114c402ee08ec6293",
+    "name": "iPhone X",
+    "description": "The iPhone X is a smartphone designed, developed and marketed by Apple Inc. It is part of the eleventh generation of the iPhone",
+    "stock": 13,
+    "price": 450.99,
+    "images": [
+        "https://fakestoreapi.denisakp.me/static/products/1/1.jpg",
+        "https://fakestoreapi.denisakp.me/static/products/1/1.jpg",
+        "https://fakestoreapi.denisakp.me/static/products/1/1.jpg",
+        "https://fakestoreapi.denisakp.me/static/products/1/1.jpg"
+    ],
+    "categories": [
+        "smartphone",
+        "iphone"
+    ],
+    "sku": "2023060001"
+}
+```
+
+For more interaction, please check the [Postman Collection](https://www.postman.com/red-eclipse-403574/workspace/denis-akp/request/6548572-ce1a21d2-78be-4fed-940f-41a16aee848c?active-environment=dff61d40-d363-4cfb-8229-c4ff7e630154)
