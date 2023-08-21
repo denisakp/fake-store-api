@@ -1,0 +1,51 @@
+# Fetch a single Order
+
+This method allows a user to retrieve an order based on its ID. The API responds with a response containing a status
+code of 200 if the product object exists. If the provided ID is not valid or does not correspond to an existing order,
+the API returns a 400 status code. Additionally, if the user submits an ID that is not a valid ObjectId,
+the API returns a 422 status code.
+
+```js copy showLineNumbers filename="orders/fetch-one.js"
+const axios = require('axios');
+
+let config = {
+  method: 'get',
+  url: 'http://localhost:3000/api/orders/6485d7a45562163f95c6e3e2',
+  headers: {
+    'Accept': 'application/json'
+  }
+};
+
+axios.request(config)
+.then((response) => {
+  console.log(JSON.stringify(response.data));
+})
+.catch((error) => {
+  console.log(error);
+});
+
+
+```
+
+Here's an example of the API's response when everything goes smoothly.
+
+```json copy filename="API Response"
+{
+    "id": "6485d7a45562163f95c6e3e2",
+    "customer": "6485c35814c402ee08ec6294",
+    "products": [
+        {
+            "sku": "2023060001",
+            "name": "Iphone X",
+            "quantity": 1,
+            "price": 450.99
+        }
+    ],
+    "total_products": 1,
+    "total_quantity": 1,
+    "total_amount": 459.99,
+    "created_datetime": "2023-06-01T00:00:00.000+00:00"
+}
+```
+
+For more interaction, please check the [Postman Collection](https://postman.com)

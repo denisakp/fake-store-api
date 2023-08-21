@@ -1,0 +1,175 @@
+# Fetch Orders
+
+This method allows a user to retrieve the list of orders. If the operation is successful,
+the API responds with a response containing a status code of 200 and a response body with the list of orders. In case of an error,
+the API returns a status code of 500.
+
+```js copy showLineNumbers filename="orders/fetch-orders.js"
+const axios = require('axios');
+
+let config = {
+  method: 'get',
+  url: 'http://localhost:3000/api/orders',
+  headers: {
+    'Accept': 'application/json'
+  }
+};
+
+axios.request(config)
+.then((response) => {
+  console.log(JSON.stringify(response.data));
+})
+.catch((error) => {
+  console.log(error);
+});
+
+```
+
+Here's an example of the API's response when everything goes smoothly.
+
+```json copy filename="API Response"
+{
+    "data": [
+        {
+            "id": "6485d7a45562163f95c6e3e2",
+            "customer": "6485c35814c402ee08ec6294",
+            "products": [
+                {
+                    "sku": "CW21001",
+                    "name": "Iphone X",
+                    "quantity": 1,
+                    "price": 459.99
+                }
+            ],
+            "total_products": 1,
+            "total_quantity": 1,
+            "total_amount": 459.99,
+            "created_datetime": "2023-06-01T00:00:00.000Z"
+        },
+        {
+            "id": "648b91b90097e4d79d964d06",
+            "created_datetime": "2023-06-01T00:00:00.000Z",
+            "products": [
+                {
+                    "sku": "CW21001",
+                    "name": "Iphone 11",
+                    "quantity": 1,
+                    "price": 459.99
+                }
+            ],
+            "total_products": 1,
+            "total_quantity": 1,
+            "total_amount": 459.99
+        }
+    ],
+    "total": 2,
+    "perPage": 15,
+    "currentPage": 1,
+    "hasNextPage": false,
+    "previousPage": null,
+    "nextPage": null
+}
+```
+> As you can see, this response is specific as it implements a pagination system that you can play with.
+
+## Limiting
+
+To apply limits when fetching orders you could combine limit and page queries as shown bellow.
+
+- **limit**: Often referred to Result Per Page, specifies the number of results to be shown on each page. By default,
+we set its value to 15
+- **page**: Often referred to Offset, indicates which page of results you want to retrieve.
+The first page is usually numbered as 1
+
+
+```js copy showLineNumbers filename="orders/limit"
+const axios = require('axios');
+
+let config = {
+  method: 'get',
+  url: 'http://localhost:3000/api/orders?limit=15&page=1',
+  headers: {
+    'Accept': 'application/json'
+  }
+};
+
+axios.request(config)
+.then((response) => {
+  console.log(JSON.stringify(response.data));
+})
+.catch((error) => {
+  console.log(error);
+});
+
+```
+
+## Sorting
+We allow sorting by date interval and Order amount interval. This means you want to organize orders
+into specific time periods and specific ranges of order amounts, and then sort these groups or buckets.
+
+Here is a sample
+
+```js copy showLineNumbers filename="orders/sorting"
+const axios = require('axios');
+
+let config = {
+  method: 'get',
+  maxBodyLength: Infinity,
+  url: 'http://localhost:3000/api/orders?startDate=2023-06-01&endDate=2023-06-30&startPrice=100&endPrice=1000',
+  headers: {
+    'Accept': 'application/json'
+  }
+};
+
+axios.request(config)
+.then((response) => {
+  console.log(JSON.stringify(response.data));
+})
+.catch((error) => {
+  console.log(error);
+});
+
+```
+
+Here is a textual description of the above code:
+
+- startDate=2023-06-01: This parameter specifies the start date for filtering orders.
+It indicates that you're interested in orders that were placed on or after June 1, 2023.
+
+- endDate=2023-06-30: This parameter specifies the end date for filtering orders. It indicates
+that you're interested in orders that were placed on or before June 30, 2023.
+
+- startPrice=100: This parameter specifies the lower limit for the order amount. You're looking
+for orders with an amount of $100 or more.
+
+- endPrice=1000: This parameter specifies the upper limit for the order amount. You're
+looking for orders with an amount of $1000 or less.
+
+As I said, this is a sample, and you are free to update it to hit your needs.
+
+## All together
+
+Combining **limit** and **sort** is possible. To do so, here is how you can handle this
+
+```js copy showLineNumbers filename="orders/limit-sorting"
+const axios = require('axios');
+
+let config = {
+  method: 'get',
+  maxBodyLength: Infinity,
+  url: 'http://localhost:3000/api/orders?limit=15&page=1&startDate=2023-06-01&endDate=2023-06-30&startPrice=100&endPrice=1000',
+  headers: {
+    'Accept': 'application/json'
+  }
+};
+
+axios.request(config)
+.then((response) => {
+  console.log(JSON.stringify(response.data));
+})
+.catch((error) => {
+  console.log(error);
+});
+
+
+```
