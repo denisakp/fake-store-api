@@ -1,11 +1,17 @@
 import { DocsThemeConfig } from 'nextra-theme-docs'
 import {useRouter} from "next/router";
 import { useConfig } from 'nextra-theme-docs'
+import Image from 'next/image'
 
 const config: DocsThemeConfig = {
     logo: () => (
         <>
-            <img src="/logo.png" alt="logo" style={{ height: "55px"}}/>
+            <Image
+                src="/logo.png"
+                width={50}
+                height={50}
+                alt="Picture of the author"
+            />
 
             <span className="nx-ml-2 nx-text-2xl nx-font-bold"> Fake Store API</span>
         </>
