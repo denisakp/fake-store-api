@@ -42,10 +42,7 @@ const config: DocsThemeConfig = {
     head: function useHead() {
         const { title } = useConfig()
         const { route } = useRouter()
-        const socialCard =
-            route === '/' || !title
-                ? 'https://nextra.site/og.jpeg'
-                : `https://nextra.site/api/og?title=${title}`
+        const socialCard = "https://res.cloudinary.com/dpdwhd6ka/image/upload/f_auto,q_auto/v1/Fake%20store%20api/lq4ehvjbaqgiyczdnfhr"
 
         return (
             <>
@@ -63,11 +60,11 @@ const config: DocsThemeConfig = {
                 />
                 <meta name="twitter:card" content="summary_large_image" />
                 <meta name="twitter:image" content={socialCard} />
-                <meta name="twitter:site:domain" content="denisakp.me" />
-                <meta name="twitter:url" content="https://denisakp.me" />
+                <meta name="twitter:site:domain" content="https://fake-store-api-sigma.vercel.app/" />
+                <meta name="twitter:url" content="https://fake-store-api-sigma.vercel.app/" />
                 <meta
                     name="og:title"
-                    content={title ? title + ' – Fake Store API' : 'Fake Store API'}
+                    content={(title && route !== '/') ? title + ' – Fake Store API' : 'Fake Store API'}
                 />
                 <meta name="og:image" content={socialCard} />
                 <meta name="apple-mobile-web-app-title" content="Fake Store API" />
