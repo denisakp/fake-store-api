@@ -1,11 +1,52 @@
-# Fetch a single product
+# Fetch a single Product
 
-Welcome to Nextra! This is a basic docs template. You can use it as a starting point for your own project :)
+This method allows a user to retrieve a product based on its ID. The API responds with a response containing a status
+code of 200 if the product object exists. If the provided ID is not valid or does not correspond to an existing product,
+the API returns a 400 status code. Additionally, if the user submits an ID that is not a valid ObjectId,
+the API returns a 422 status code.
 
-## What is Nextra?
+```js copy showLineNumbers filename="products/fetch-one.js"
+const axios = require('axios');
 
-A **simple**, **powerful** and **flexible** site generation framework with everything you love from Next.js.
+let config = {
+  method: 'get',
+  url: 'http://localhost:3000/api/products/64858a3114c402ee08ec6293',
+  headers: {
+    'Accept': 'application/json'
+  }
+};
 
-## Documentation
+axios.request(config)
+.then((response) => {
+  console.log(JSON.stringify(response.data));
+})
+.catch((error) => {
+  console.log(error);
+});
 
-The documentation is available at [https://nextra.site](https://nextra.site).
+```
+
+Here's an example of the API's response when everything goes smoothly.
+
+```json copy filename="API Response"
+{
+    "id": "64858a3114c402ee08ec6293",
+    "name": "iPhone X",
+    "description": "The iPhone X is a smartphone designed, developed and marketed by Apple Inc. It is part of the eleventh generation of the iPhone",
+    "stock": 13,
+    "price": 450.99,
+    "images": [
+        "https://fakestoreapi.denisakp.me/static/products/1/1.jpg",
+        "https://fakestoreapi.denisakp.me/static/products/1/1.jpg",
+        "https://fakestoreapi.denisakp.me/static/products/1/1.jpg",
+        "https://fakestoreapi.denisakp.me/static/products/1/1.jpg"
+    ],
+    "categories": [
+        "smartphone",
+        "iphone"
+    ],
+    "sku": "2023060001"
+}
+```
+
+For more interaction, please check the [Postman Collection](https://postman.com)

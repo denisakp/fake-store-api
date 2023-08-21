@@ -1,3 +1,5 @@
+import {Callout} from "nextra/components";
+
 # Delete a product
 
 This method allows a user to remove a product from the database based on its ID. If the request is successful,
@@ -23,5 +25,10 @@ axios.request(config)
 });
 
 ```
+
+<Callout>
+    Upon execution, you will receive No Content (HTTP 204 code). However,
+    please note that no changes will be made to the actual database.
+</Callout>
 
 For more interaction, please check the [Postman Collection](https://postman.com)
