@@ -1,3 +1,6 @@
+import {Callout} from "nextra/components";
+
+
 # Update a category
 
 This method allows a user to update a category based on its ID. If the operation is successful,
@@ -32,7 +35,10 @@ axios.request(config)
 
 ```
 
-> Upon execution, you will receive an object with the sent ID containing updated values. However, please note that no changes will be made to the actual database.
+<Callout>
+    Upon execution, you will receive an object with the sent ID containing updated values. However,
+    please note that no changes will be made to the actual database.
+</Callout>
 
 Here's an example of the API's response when everything goes smoothly.
 
