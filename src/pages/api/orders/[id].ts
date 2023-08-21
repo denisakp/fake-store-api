@@ -2,6 +2,7 @@ import {NextApiRequest, NextApiResponse} from "next";
 import {deleteOrder, loadOrder, updateOrder} from "@/services/orders.service";
 import {validateOrderUpdate} from "@/validations/order.validation";
 import transformResponse from "@/helpers/transform-response";
+import {METHOD_NOT_ALLOWED, RESOURCE_NOT_FOUND} from "@/exceptions/database.exception";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const docRef: string = req.query.id as string;
@@ -9,9 +10,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     switch (req.method) {
         case 'GET':
             try {
-                const order = await loadOrder(docRef);
+                const order = loadOrder(docRef);
                 if(!order)
-                    res.status(400).json({message: "Order with reference '" + docRef + "' not found !"});
+                    res.status(400).json({message: RESOURCE_NOT_FOUND(docRef)});
                 res.json(transformResponse(order));
             } catch (e: any) {
                 res.status(400).json({message: e.message})
@@ -25,7 +26,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             try {
                 const updated =  updateOrder(docRef, value);
                 if(!updated)
-                    res.status(400).json({ message: "Order with reference '" + docRef + "' not found !" });
+                    res.status(400).json({ message:  RESOURCE_NOT_FOUND(docRef) });
                 res.json(transformResponse(updated));
             } catch (e: any) {
                 res.status(422).json({error: 'Validation error', message: e.message})
@@ -35,7 +36,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             try {
                 const success =  deleteOrder(docRef);
                 if(!success)
-                    res.status(400).json({message: "Order with reference '" + docRef + "' not found !"});
+                    res.status(400).json({message:  RESOURCE_NOT_FOUND(docRef)});
 
                 res.status(204).json(docRef)
             } catch (e: any) {
@@ -44,6 +45,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
             break;
         default:
-            res.status(405).json({message: 'Method not allowed'})
+            res.status(405).json({message: METHOD_NOT_ALLOWED})
     }
 }
