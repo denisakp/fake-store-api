@@ -17,12 +17,12 @@ let data = JSON.stringify({
 
 let config = {
   method: 'patch',
-  url: 'https://fakestoreapi.denisakp.dev/api/categories/6479065cb337e71eb79da693',
+  url: 'http://localhost:3000/api/categories/6479065cb337e71eb79da693',
   headers: {
     'Accept': 'application/json',
     'Content-Type': 'application/json'
   },
-  data
+  data : data
 };
 
 axios.request(config)

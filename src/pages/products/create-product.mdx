@@ -10,9 +10,9 @@ the API returns a 422 status code.
 ```js copy showLineNumbers filename="products/create-product.js"
 const axios = require('axios');
 let data = JSON.stringify({
-  "name": "Ball",
+  "name": "Fish",
   "price": 2800,
-  "description": "I love chicken",
+  "description": "Product description here",
   "stock": 8,
   "images": [
     "http://placeimg.com/640/480/food",
@@ -29,7 +29,7 @@ let data = JSON.stringify({
 
 let config = {
   method: 'post',
-  url: 'https://fakestoreapi.denisakp.dev/api/products/',
+  url: 'http://localhost:3000/api/products/',
   headers: {
     'Accept': 'application/json',
     'Content-Type': 'application/json'
@@ -44,7 +44,6 @@ axios.request(config)
 .catch((error) => {
   console.log(error);
 });
-
 
 ```
 

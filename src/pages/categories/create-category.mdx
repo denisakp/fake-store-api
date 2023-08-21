@@ -15,12 +15,12 @@ let data = JSON.stringify({
 
 let config = {
   method: 'post',
-  url: 'https://fakestoreapi.denisakp.me/api/categories/',
+  url: 'http://localhost:3000/api/categories/',
   headers: {
     'Accept': 'application/json',
     'Content-Type': 'application/json'
   },
-  data
+  data : data
 };
 
 axios.request(config)

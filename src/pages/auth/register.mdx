@@ -18,12 +18,12 @@ let data = JSON.stringify({
 
 let config = {
   method: 'post',
-  url: 'https://fakestoreapi.denisakp.dev/api/auth/register',
+  url: 'http://localhost:3000/api/auth/register',
   headers: {
     'Accept': 'application/json',
     'Content-Type': 'application/json'
   },
-  data
+  data : data
 };
 
 axios.request(config)
@@ -33,6 +33,7 @@ axios.request(config)
 .catch((error) => {
   console.log(error);
 });
+
 ```
 
 <Callout>

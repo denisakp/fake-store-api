@@ -7,18 +7,13 @@ the API returns a 422 status code.
 
 ```js copy showLineNumbers filename="categories/fetch-one.js"
 const axios = require('axios');
-let data = JSON.stringify({
-  "name": "updated"
-});
 
 let config = {
-  method: 'patch',
-  url: 'https://fakestoreapi.denisakp.dev/api/categories/6479065cb337e71eb79da693',
+  method: 'get',
+  url: 'http://localhost:3000/api/categories/6479065cb337e71eb79da693',
   headers: {
-    'Accept': 'application/json',
-    'Content-Type': 'application/json'
-  },
-  data
+    'Accept': 'application/json'
+  }
 };
 
 axios.request(config)
@@ -28,6 +23,7 @@ axios.request(config)
 .catch((error) => {
   console.log(error);
 });
+
 ```
 
 Here's an example of the API's response when everything goes smoothly.

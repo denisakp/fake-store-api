@@ -10,7 +10,7 @@ const axios = require('axios');
 
 let config = {
   method: 'get',
-  url: 'https://fakestoreapi.denisakp.dev/api/categories',
+  url: 'http://localhost:3000/api/categories',
   headers: {
     'Accept': 'application/json'
   }
@@ -23,6 +23,7 @@ axios.request(config)
 .catch((error) => {
   console.log(error);
 });
+
 ```
 
 Here's an example of the API's response when everything goes smoothly.
