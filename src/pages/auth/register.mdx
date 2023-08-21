@@ -1,3 +1,6 @@
+import {Callout} from "nextra/components";
+
+
 # Registration
 
 This method in the Fake Store API allows users to create an account by providing their name, email and password.
@@ -32,9 +35,13 @@ axios.request(config)
 });
 ```
 
-> When you send an object as shown in the code above, it will respond with a customer object containing a new ID. Keep in mind that any real-world data won't be inserted into the database. Therefore, attempting to access the new ID will result in a 404 error.
+<Callout>
+    When you send an object as shown in the code above, it will respond with a customer object containing a new ID.
+    Keep in mind that any real-world data won't be inserted into the database. Therefore, attempting to access the new ID will result in a 404 error.
+</Callout>
 
-Here's an example of the API's response when everything goes smoothly.
+
+Here's then a sample response from the API when everything goes smoothly.
 ``` json copy filename="API Response"
 {
     "id": "64905dc7cf953657b84336df",

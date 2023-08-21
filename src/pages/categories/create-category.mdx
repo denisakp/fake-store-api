@@ -1,3 +1,6 @@
+import {Callout} from "nextra/components";
+
+
 # Create a category
 
 This method allows a user to register a new product category in the database. If the operation is successful,
@@ -28,14 +31,14 @@ axios.request(config)
   console.log(error);
 });
 
-
 ```
 
-> By sending an object similar to the code provided, you will receive an object with a new ID. However,
-please be aware that no real data will be inserted into the database. Therefore, attempting to access the new ID will result in a 404 error.
+<Callout>
+    When you send an object as shown in the code above, it will respond with a category object containing a new ID.
+    Keep in mind that any real-world data won't be inserted into the database. Therefore, attempting to access the new ID will result in a 404 error.
+</Callout>
 
-
-Here's an example of the API's response when everything goes smoothly.
+Here's then a sample response from the API when everything goes smoothly.
 
 ```json copy filename="API Response"
 {
