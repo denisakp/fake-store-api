@@ -4,10 +4,6 @@ import {ObjectId} from "bson";
 import {ProductInterface, ProductQueryBuilderParameter} from "@/interfaces/product.interface";
 import {DUMMY_PRODUCT} from "@/helpers/constants";
 
-/**
- * Load products resources
- * @param query
- */
 export async function loadProducts(query: ProductQueryBuilderParameter) {
     const db = await connectToDB();
     try {
@@ -29,10 +25,6 @@ export async function loadProducts(query: ProductQueryBuilderParameter) {
     }
 }
 
-/**
- * Load a single product by its docRef
- * @param docRef
- */
 export function loadProduct(docRef: string) {
     try {
         const docRefOi = new ObjectId(docRef);
@@ -45,19 +37,10 @@ export function loadProduct(docRef: string) {
     }
 }
 
-/**
- * Create a new product resource
- * @param data
- */
 export function createProduct(data: ProductInterface) {
     return {_id: new ObjectId().toString(), ...data}
 }
 
-/**
- * update a product resource by its docRef
- * @param docRef
- * @param data
- */
 export function updateProduct(docRef: string, data: ProductInterface) {
     try {
         const docRefOi = new ObjectId(docRef);
@@ -70,10 +53,7 @@ export function updateProduct(docRef: string, data: ProductInterface) {
     }
 }
 
-/**
- * Delete a product resource
- * @param docRef
- */
+
 export function deleteProduct(docRef: string) {
     try {
         const docRef_oi = new ObjectId(docRef);

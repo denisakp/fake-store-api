@@ -4,10 +4,6 @@ import {OrderInterface, OrderQueryBuilderParameter} from "@/interfaces/order.int
 import {ObjectId} from "bson";
 import {DUMMY_ORDER} from "@/helpers/constants";
 
-/**
- * Load orders resources
- * @param query
- */
 export async function loadOrders(query: OrderQueryBuilderParameter) {
     const db = await connectToDB();
     try {
@@ -28,10 +24,6 @@ export async function loadOrders(query: OrderQueryBuilderParameter) {
     }
 }
 
-/**
- * Load an order resource by its docRef
- * @param docRef
- */
 export function loadOrder(docRef: string) {
     try {
         const docRef_oi = new ObjectId(docRef);
@@ -47,10 +39,6 @@ export function loadOrder(docRef: string) {
 
 }
 
-/**
- * Create a new order resource
- * @param data
- */
 export function createOrder(data: OrderInterface) {
     const customer_oi = new ObjectId(data.customer);
     if (!customer_oi || !customer_oi.equals('6485c35814c402ee08ec6294'))
@@ -68,11 +56,6 @@ export function createOrder(data: OrderInterface) {
     return {...DUMMY_ORDER, ..._data}
 }
 
-/**
- * Update order resource by its docRef
- * @param docRef
- * @param data
- */
 export function updateOrder(docRef: string, data: OrderInterface) {
     try {
         const customer_oi = new ObjectId(data.customer);
@@ -97,10 +80,6 @@ export function updateOrder(docRef: string, data: OrderInterface) {
     }
 }
 
-/**
- *
- * @param docRef
- */
 export function deleteOrder(docRef: string) {
     try {
         const docRef_oi = new ObjectId(docRef);
